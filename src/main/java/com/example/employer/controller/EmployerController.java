@@ -17,6 +17,11 @@ public class EmployerController {
         this.employerService = employerService;
     }
 
+    @GetMapping("hello")
+    public String helloWorld() {
+        return "Welcome to my World";
+    }
+
     @GetMapping
     public List<EmployerDTO> findAllEmployers() {
         return employerService.findAllEmployers();
