@@ -9,6 +9,10 @@ terraform {
 provider "azurerm" {
   features {}
 }
+variable "imagebuild" {
+  type        = string
+  description = "Latest Image Build"
+}
 
 resource "azurerm_resource_group" "aks-IaC-test" {
   location = "West Europe"
@@ -23,7 +27,7 @@ resource "azurerm_container_group" "tfcg-test" {
   dns_name_label      = "employer"
   container {
     cpu    = "1"
-    image  = "endritzeqo/employer_backend"
+    image  = "endritzeqo/employer_backend:${var.imagebuild}"
     memory = "1"
     name   = "employer"
     ports {
