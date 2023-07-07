@@ -1,16 +1,18 @@
 package com.example.employer.model;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@Builder(toBuilder = true)
 public class Address {
 
-    private String city;
-    private String address;
-    private Integer road_number;
-    private Integer postal_code;
+    private @Nullable String city;
+    private @Nullable String homeAddress;
+    private @Nullable Integer roadNumber;
+    private @Nullable Integer postalCode;
 }

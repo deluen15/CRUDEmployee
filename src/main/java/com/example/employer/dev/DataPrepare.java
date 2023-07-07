@@ -25,25 +25,30 @@ public class DataPrepare {
     }
 
     private void createEmployer() {
-        Address endriAdd = new Address("Leverkusen", "Humboldtstrasse", 21, 51379);
+        Address endriAddress = Address.builder()
+                .homeAddress("Rruga e Dibres")
+                .city("Tirane")
+                .postalCode(1001)
+                .roadNumber(19)
+                .build();
 
         String email = "Endri.zeqo@gmail.com";
-        Employer employer = new Employer(UUID.randomUUID().toString(),
-                "Endri",
-                "Zeqo",
-                email,
-                endriAdd,
-                BigDecimal.valueOf(1777500479),
-                "19byte");
+        Employer employer = Employer.builder()
+                .id(UUID.randomUUID().toString())
+                .name("Endri")
+                .lastName("Zeqo")
+                .email(email)
+                .address(endriAddress)
+                .phone(BigDecimal.valueOf(1777500479))
+                .workingCompany("19byte")
+                .build();
         checkIfEmployerExists(email, employer);
 
     }
 
     private void checkIfEmployerExists(String email, Employer employer) {
-        repository.findEmployerByEmail(email).ifPresentOrElse(s -> {
-            System.out.println("emplyer exists" + s);
-        }, () -> {
-            System.out.println("Inserting Student" + employer);
+        repository.findEmployerByEmail(email).ifPresentOrElse(s -> log.debug("Employer already exists"), () -> {
+            log.debug("Employer does not exist, creating new one");
             repository.insert(employer);
         });
     }
