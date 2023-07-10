@@ -11,8 +11,8 @@ spring:
   main:
     allow-circular-references: true
 
+springdoc.swagger-ui.path: /swagger-ui.html
+server:
+  port: 8080
 
-logging:
-  file:
-    name: logs/employer.log
 

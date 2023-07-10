@@ -33,7 +33,7 @@ public class EmployerController {
         return employerService.findAllEmployers();
     }
 
-    @GetMapping("{id}")
+    @GetMapping(value = "{id}", produces = "application/json")
     @Operation(summary = "Find Employer by ID",
             tags = {"Employer"},
             responses = {
@@ -46,7 +46,7 @@ public class EmployerController {
         return employerService.getEmployerByID(id);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping(value = "{id}", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete Employer by ID",
             tags = {"Employer"},
@@ -61,7 +61,7 @@ public class EmployerController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping
+    @PostMapping(produces = "application/json")
     @Operation(summary = "Save and update Employer by ID",
             tags = {"Employer"},
             responses = {
@@ -76,7 +76,7 @@ public class EmployerController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("{id}")
+    @PutMapping(value = "{id}", produces = "application/json")
     @Operation(summary = "Update Employer by ID",
             tags = {"Employer"},
             responses = {
