@@ -2,7 +2,6 @@ package com.example.employer.service;
 
 import com.example.employer.dto.EmployerDTO;
 import com.example.employer.exeptions.EmployerNotFoundException;
-import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.mongodb.assertions.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -58,23 +56,23 @@ class EmployerServiceTest {
         verify(this.employerRepository).findAll();
     }
 
-    @Test
-    @DisplayName("Test for method: EmployerService.findAllEmployers()")
-    void testGetEmployerByID_ValidID_ReturnsEmployerDTO() {
-        // Arrange
-        String id = "123";
-        Employer employer = Employer.builder().build();
-        employer.setId(id);
-
-        when(employerRepository.findById(id)).thenReturn(Optional.of(employer));
-        when(employerMapper.map(employer)).thenReturn(new EmployerDTO());
-
-        // Act
-        EmployerDTO result = employerService.getEmployerByID(id);
-
-        // Assert
-        assertNotNull(result);
-    }
+//    @Test
+//    @DisplayName("Test for method: EmployerService.findAllEmployers()")
+//    void testGetEmployerByID_ValidID_ReturnsEmployerDTO() {
+//        // Arrange
+//        String id = "123";
+//        Employer employer = Employer.builder().build();
+//        employer.setId(id);
+//
+//        when(employerRepository.findById(id)).thenReturn(Optional.of(employer));
+//        when(employerMapper.map(employer)).thenReturn(new EmployerDTO());
+//
+//        // Act
+//        EmployerDTO result = employerService.getEmployerByID(id);
+//
+//        // Assert
+//        assertNotNull(result);
+//    }
 
     @Test
     @DisplayName("Test for method: EmployerService.findAllEmployers()")

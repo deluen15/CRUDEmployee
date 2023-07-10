@@ -45,6 +45,7 @@ services:
     image: docker.elastic.co/logstash/logstash:8.8.2
     volumes:
       - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs/application.log:/var/log/application.log
     depends_on:
       - elasticsearch
     networks:
