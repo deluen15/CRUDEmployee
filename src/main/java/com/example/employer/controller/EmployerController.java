@@ -71,7 +71,7 @@ public class EmployerController {
                                     schema = @Schema(implementation = EmployerDTO.class)))}
     )
     public String save(@RequestBody EmployerDTO employerDTO) {
-        employerService.saveEmployee(employerDTO);
+        employerService.saveEmployer(employerDTO);
         return "Employer saved successfully";
     }
 

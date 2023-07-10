@@ -1,77 +1,58 @@
 # Employer Service
 
-This code represents a service class in the `com.example.employer.service` package that interacts with a MongoDB database and includes the ELK (Elasticsearch,
-Logstash, Kibana) stack for visualizing logs in Kibana. The service provides CRUD (Create, Read, Update, Delete) operations for an `Employer` entity.
+The Employer application is a component that provides CRUD (Create, Read, Update, Delete) operations for the `Employer` entity. It is implemented as a service
+class
+in the `com.example.employer.service` package and interacts with a MongoDB database. Additionally, it includes integration with the ELK (Elasticsearch,
+Logstash, Kibana) stack for visualizing logs in Kibana. The service also utilizes the OpenAPI Swagger generator by Maven plugin to automatically generate API
+documentation.
 
-## Dependencies
+## CRUD Operations
 
-This code relies on the following dependencies:
+The Employer Service supports the following CRUD operations:
 
-- `com.example.employer.dto.EmployerDTO`: This class represents the data transfer object for an employer.
-- `com.example.employer.exceptions.EmployerNotFoundException`: This exception is thrown when an employer is not found.
-- `com.example.employer.model.Employer`: This class represents the employer entity.
-- `com.example.employer.repository.EmployerRepository`: This repository provides methods for interacting with the MongoDB database.
-- `com.example.employer.service.imp.EmployerMapper`: This mapper class maps between `EmployerDTO` and `Employer` objects.
-- `org.springframework.stereotype.Service`: This annotation identifies the class as a service component in the Spring framework.
-- `lombok.RequiredArgsConstructor`: This annotation generates a constructor with required arguments.
-- `lombok.extern.slf4j.Slf4j`: This annotation enables logging using the Simple Logging Facade for Java (SLF4J).
+### Create (Save) Employer
 
-## Service Methods
+The `saveEmployee` method is responsible for saving a new employer to the MongoDB database. It takes an `EmployerDTO` object as input, which represents the
+employer to be saved. If the employer already has an ID, it uses that ID; otherwise, it generates a new UUID as the ID. The method maps the `EmployerDTO` to
+an `Employer` object using the `EmployerMapper`, sets the ID, and saves it to the database. The action is logged using the log level `info`, along with the
+saved employer's ID.
 
-### findAllEmployers
+### Read (Retrieve) Employers
 
-```java
-public List<EmployerDTO> findAllEmployers()
-```
+The `findAllEmployers` method retrieves all employers from the MongoDB database. It uses the `employerRepository.findAll()` method to fetch the employers and
+maps them to a list of `EmployerDTO` objects using the `EmployerMapper`. The method also logs the number of employers found using the log level `debug`.
 
-This method retrieves all employers from the MongoDB database, maps them to `EmployerDTO` objects using the `EmployerMapper`, and returns a list
-of `EmployerDTO` objects.
+The `getEmployerByID` method retrieves a specific employer from the database based on the provided ID. It uses the `employerRepository.findById(id)` method to
+find the employer. If an employer with the specified ID is found, it is mapped to an `EmployerDTO` object using the `EmployerMapper` and returned. If no
+employer is found, it throws an `EmployerNotFoundException` and logs a warning message with the ID using the log level `warn`.
 
-### getEmployerByID
+### Update Employer
 
-```java
-public EmployerDTO getEmployerByID(String id)
-```
+The `updateEmployer` method updates an existing employer in the MongoDB database. It takes an ID and an `EmployerDTO` object representing the updated employer
+as input. First, it retrieves the existing employer from the database using the `employerRepository.findById(id)` method. If the employer is not found, it
+throws an `EmployerNotFoundException`. Otherwise, it maps the properties of the `updatedEmployer` to the existing employer using the `EmployerMapper`, sets the
+ID, and saves it to the database. The action is logged with the updated employer's ID using the log level `debug`.
 
-This method retrieves an employer from the MongoDB database based on the given ID. It maps the found employer to an `EmployerDTO` object using
-the `EmployerMapper` and returns the `EmployerDTO`. If no employer is found, it throws an `EmployerNotFoundException`.
+### Delete Employer
 
-### saveEmployee
-
-```java
-public void saveEmployee(EmployerDTO employerDTO)
-```
-
-This method saves a new employer to the MongoDB database. If the employer already has an ID, it uses that ID; otherwise, it generates a new UUID as the ID. The
-method maps the `EmployerDTO` to an `Employer` object using the `EmployerMapper`, sets the ID, and saves it to the database. It logs the action with the saved
-employer's ID.
-
-### deleteEmployerByID
-
-```java
-public void deleteEmployerByID(String id)
-```
-
-This method deletes an employer from the MongoDB database based on the given ID. It removes the employer with the specified ID from the database. It logs the
-action with the deleted employer's ID.
-
-### updateEmployer
-
-```java
-public void updateEmployer(String id,EmployerDTO updatedEmployer)
-```
-
-This method updates an existing employer in the MongoDB database. It retrieves the employer based on the given ID, throws an `EmployerNotFoundException` if not
-found, maps the `updatedEmployer` to the existing employer using the `EmployerMapper`, sets the ID, and saves it to the database. It logs the action with the
-updated employer's ID.
-
-## Logging
-
-This code utilizes logging for various actions using SLF4J. The logging statements include the log level (e.g., `debug`, `info`, `warn`) and relevant
-information about the performed action, such as the number of employers found, the ID of an employer, or a warning message.
+The `deleteEmployerByID` method deletes an employer from the MongoDB database based on the provided ID. It uses the `employerRepository.deleteById(id)` method
+to remove the employer with the specified ID from the database. The action is logged with the deleted employer's ID using the log level `debug`.
 
 ## ELK Stack Integration
 
-This code is integrated with the ELK (Elasticsearch, Logstash, Kibana) stack for visualizing logs in Kibana. The ELK stack provides a centralized logging
-solution where logs can be collected, processed, and analyzed. The logs generated by this code are sent to Logstash, which parses and forwards them to
-Elasticsearch for indexing. Finally, Kibana is used to search, analyze, and visualize the logs stored in Elasticsearch.
+The Employer Service integrates with the ELK (Elasticsearch, Logstash, Kibana) stack to enable centralized logging and log visualization in Kibana. The ELK
+stack consists of the following components:
+
+- Elasticsearch: Stores and indexes the logs generated by the service.
+- Logstash: Collects, processes, and forwards the logs to Elasticsearch.
+- Kibana: Provides a web interface for searching, analyzing, and visualizing the logs stored in Elasticsearch.
+
+By integrating with the ELK stack, the service can send its log statements to Logstash, which parses and forwards them to Elasticsearch for indexing. Kibana can
+then be used to explore and visualize the logs, enabling efficient log analysis and monitoring.
+
+## OpenAPI Documentation Generation
+
+The Employer Service utilizes the OpenAPI Swagger generator by Maven plugin to automatically generate API documentation. This documentation describes the
+available endpoints, their input and output parameters, and any additional annotations provided for documenting the API. The plugin scans the service class and
+generates the OpenAPI documentation based on the annotated methods and models. The generated documentation can be used to understand the service's API and can
+be viewed using tools such as Swagger UI or integrated into other documentation systems.

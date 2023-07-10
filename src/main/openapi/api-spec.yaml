@@ -1,0 +1,137 @@
+openapi: 3.0.1
+info:
+  title: Employer API
+  description: The employer-api is responsible for all tasks related to maintaining
+    the employers
+  contact:
+    name: 19Bytes gmbh
+    url: https://19bytes.de/
+  version: "1.0"
+servers:
+- url: http://localhost:8080
+  description: DEV
+paths:
+  /api/v1/employer/{id}:
+    get:
+      tags:
+      - Employer
+      summary: Find Employer by ID
+      operationId: findById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerDTO'
+    put:
+      tags:
+      - Employer
+      summary: Update Employer by ID
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerDTO'
+    delete:
+      tags:
+      - Employer
+      summary: Delete Employer by ID
+      operationId: deleteStudent
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerDTO'
+  /api/v1/employer/:
+    get:
+      tags:
+      - Employer
+      summary: Find all Employers
+      operationId: findAllEmployers
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerDTO'
+    post:
+      tags:
+      - Employer
+      summary: Save and update Employer by ID
+      operationId: save
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployerDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployerDTO'
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        home_address:
+          type: string
+        road_number:
+          type: integer
+          format: int32
+        postal_code:
+          type: integer
+          format: int32
+    EmployerDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        phone:
+          type: string
+        working_company:
+          type: string

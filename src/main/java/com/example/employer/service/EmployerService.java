@@ -42,7 +42,7 @@ public class EmployerService {
                 });
     }
 
-    public void saveEmployee(EmployerDTO employerDTO) {
+    public void saveEmployer(EmployerDTO employerDTO) {
         String id = Optional.ofNullable(employerDTO.getId())
                 .filter(s -> !s.isEmpty())
                 .orElse(UUID.randomUUID().toString());
