@@ -1,0 +1,18 @@
+spring:
+
+  data:
+    mongodb:
+      port: 27017
+      database: employer
+      host: localhost
+      username: rootuser
+      password: rootpass
+      authentication-database: admin
+  main:
+    allow-circular-references: true
+
+
+logging:
+  file:
+    name: logs/employer.log
+

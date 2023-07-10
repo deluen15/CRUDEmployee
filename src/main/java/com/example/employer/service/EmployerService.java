@@ -7,14 +7,13 @@ import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static org.apache.logging.log4j.util.Strings.isBlank;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class EmployerService {
 
     private final EmployerRepository employerRepository;
 
-    private final EmployerMapper mapper;
+    private final @NonNull EmployerMapper mapper;
 
 
     public List<EmployerDTO> findAllEmployers() {
@@ -43,45 +42,31 @@ public class EmployerService {
                 });
     }
 
-    public void upsert(String id, EmployerDTO employerDTO) {
-        if (isBlank(employerDTO.getId())) {
-            employerDTO.setId(UUID.randomUUID().toString());
-        }
+    public void saveEmployee(EmployerDTO employerDTO) {
+        String id = Optional.ofNullable(employerDTO.getId())
+                .filter(s -> !s.isEmpty())
+                .orElse(UUID.randomUUID().toString());
 
-        Optional<Employer> optionalEmployer = employerRepository.findById(id);
-        Employer existingEmployer;
-
-        if (optionalEmployer.isPresent()) {
-            existingEmployer = optionalEmployer.get();
-        } else {
-            log.warn("Employer not found for ID: {}", id);
-            return;
-        }
-
-        mapper.map(employerDTO, existingEmployer);
-        employerRepository.save(existingEmployer);
-
-        if (isBlank(id)) {
-            log.debug("Saved new employer with ID: {}", existingEmployer.getId());
-        } else {
-            log.debug("Updated employer with ID: {}", id);
-        }
+        Employer employer = mapper.map(employerDTO);
+        employer.setId(id);
+        employerRepository.save(employer);
+        log.info("Saved new employer with ID: {}", employer.getId());
     }
 
 
     public void deleteEmployerByID(String id) {
+
         employerRepository.deleteById(id);
         log.debug("Deleted employer with ID: {}", id);
     }
 
-//    public void updateEmployer(String id, EmployerDTO updatedEmployer) {
-//        Employer existingEmployer = employerRepository.findById(id)
-//                .orElseThrow(() -> {
-//                    log.warn("Employer not found for ID: {}", id);
-//                    return new EmployerNotFoundException(id);
-//                });
-//        mapper.map(updatedEmployer, existingEmployer);
-//        employerRepository.save(existingEmployer);
-//        log.debug("Updated employer with ID: {}", id);
-//    }
+    public void updateEmployer(String id, EmployerDTO updatedEmployer) {
+
+        Employer existingEmployer = employerRepository.findById(id)
+                .orElseThrow(() -> new EmployerNotFoundException(id));
+        mapper.map(existingEmployer, updatedEmployer);
+        existingEmployer.setId(updatedEmployer.getId());
+        employerRepository.save(existingEmployer);
+        log.debug("Updated employer with ID: {}", id);
+    }
 }

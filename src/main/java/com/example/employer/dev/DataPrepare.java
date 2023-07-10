@@ -15,8 +15,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class DataPrepare {
-    private final EmployerRepository repository;
 
+    private final EmployerRepository repository;
 
     @PostConstruct
     public void postConstruct() {

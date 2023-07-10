@@ -1,7 +1,8 @@
 package com.example.employer.model;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -14,7 +15,8 @@ import java.math.BigDecimal;
 @Data
 @Builder(toBuilder = true)
 @Document(collection = "employer")
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonNaming(SnakeCaseStrategy.class)
+@Schema
 public class Employer {
 
     @Id

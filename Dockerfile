@@ -1,5 +1,4 @@
-FROM openjdk:16-alpine3.13
-LABEL maintainer="endri.zeqo@gmail.com"
+FROM adoptopenjdk/openjdk11:jdk-11.0.11_9-alpine-slim
 VOLUME /main-app
 ADD target/employer-docker.jar app.jar
 EXPOSE 8080
