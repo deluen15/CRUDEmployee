@@ -1,5 +1,6 @@
 spring:
-
+  application:
+    name: Employer-CRUD
   data:
     mongodb:
       port: 27017
@@ -15,4 +16,14 @@ springdoc.swagger-ui.path: /swagger-ui.html
 server:
   port: 8080
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+    jmx:
+      exposure:
+        include: '*'
+  metrics:
+    tags:
+      application: ${spring.application.name}

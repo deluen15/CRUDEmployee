@@ -1,8 +1,5 @@
 package com.example.employer.controller;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import com.example.employer.dto.EmployerDTO;
 import com.example.employer.model.Address;
 import com.example.employer.model.Employer;
@@ -10,10 +7,6 @@ import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.EmployerService;
 import com.example.employer.service.imp.EmployerMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.ArrayList;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -28,6 +21,12 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.ArrayList;
+import java.util.Optional;
+
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {EmployerController.class, EmployerService.class})
 @ExtendWith(SpringExtension.class)

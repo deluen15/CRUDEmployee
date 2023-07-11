@@ -61,6 +61,22 @@ services:
     depends_on:
       - elasticsearch
 
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/config.yml
+    command:
+      - '--config.file=/etc/prometheus/config.yml'
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
 volumes:
   data: { }
 
