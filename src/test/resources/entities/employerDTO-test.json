@@ -1,0 +1,14 @@
+{
+  "id": "26e7c42f-968a-4df8-bc15-b748e153b0b0",
+  "name": "Michael",
+  "last_name": "Johnson",
+  "email": "michael.johnson@example.com",
+  "address": {
+    "city": "Chicago",
+    "home_address": "789 Oak St",
+    "road_number": 123,
+    "postal_code": 60001
+  },
+  "phone": "2468135790",
+  "working_company": "123 Industries"
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "2a4e894e-23f5-4c48-a67d-976eb3d598a1",
+    "name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "address": {
+      "city": "New York",
+      "home_address": "123 Main St",
+      "road_number": 456,
+      "postal_code": 10001
+    },
+    "phone": "1234567890",
+    "working_company": "ABC Corporation"
+  },
+  {
+    "id": "7896db81-5d7b-4e57-8792-0d9f9c7a06e2",
+    "name": "Jane",
+    "last_name": "Smith",
+    "email": "jane.smith@example.com",
+    "address": {
+      "city": "Los Angeles",
+      "home_address": "456 Elm St",
+      "road_number": 789,
+      "postal_code": 90001
+    },
+    "phone": "9876543210",
+    "working_company": "XYZ Inc."
+  },
+  {
+    "id": "26e7c42f-968a-4df8-bc15-b748e153b0b0",
+    "name": "Michael",
+    "last_name": "Johnson",
+    "email": "michael.johnson@example.com",
+    "address": {
+      "city": "Chicago",
+      "home_address": "789 Oak St",
+      "road_number": 123,
+      "postal_code": 60001
+    },
+    "phone": "2468135790",
+    "working_company": "123 Industries"
+  },
+  {
+    "id": "480c2f88-459e-4f7f-aa3f-362f30e3445f",
+    "name": "Emily",
+    "last_name": "Brown",
+    "email": "emily.brown@example.com",
+    "address": {
+      "city": "San Francisco",
+      "home_address": "321 Pine St",
+      "road_number": 987,
+      "postal_code": 94101
+    },
+    "phone": "1357924680",
+    "working_company": "456 Corporation"
+  },
+  {
+    "id": "c9cc94f9-5fc4-40cd-bc22-26d6d7c85ac2",
+    "name": "David",
+    "last_name": "Wilson",
+    "email": "david.wilson@example.com",
+    "address": {
+      "city": "Seattle",
+      "home_address": "654 Cedar St",
+      "road_number": 321,
+      "postal_code": 98001
+    },
+    "phone": "3698521470",
+    "working_company": "789 Corp"
+  },
+  {
+    "id": "c5c4c695-4d8c-46c9-bd8f-bb02b811bb55",
+    "name": "Sarah",
+    "last_name": "Taylor",
+    "email": "sarah.taylor@example.com",
+    "address": {
+      "city": "Miami",
+      "home_address": "987 Palm St",
+      "road_number": 654,
+      "postal_code": 33001
+    },
+    "phone": "7539514860",
+    "working_company": "ABC Corp"
+  },
+  {
+    "id": "ed5f7e54-56e5-4787-92a5-2fe785003c4d",
+    "name": "Christopher",
+    "last_name": "Anderson",
+    "email": "christopher.anderson@example.com",
+    "address": {
+      "city": "Dallas",
+      "home_address": "789 Maple St",
+      "road_number": 456,
+      "postal_code": 75001
+    },
+    "phone": "9517538520",
+    "working_company": "XYZ Corporation"
+  },
+  {
+    "id": "f07f8f25-8f1b-43df-9e24-221ac2a1b2da",
+    "name": "Jessica",
+    "last_name": "Lee",
+    "email": "jessica.lee@example.com",
+    "address": {
+      "city": "Houston",
+      "home_address": "123 Elm St",
+      "road_number": 789,
+      "postal_code": 77001
+    },
+    "phone": "8529631470",
+    "working_company": "123 Corp"
+  },
+  {
+    "id": "f3333c52-7e19-4a01-b2b3-86b8e8d3e43e",
+    "name": "Matthew",
+    "last_name": "Harris",
+    "email": "matthew.harris@example.com",
+    "address": {
+      "city": "Phoenix",
+      "home_address": "456 Oak St",
+      "road_number": 123,
+      "postal_code": 85001
+    },
+    "phone": "7418529630",
+    "working_company": "456 Industries"
+  },
+  {
+    "id": "3e2ad5d3-32c9-4c6b-9fe7-08d5f45b8d2a",
+    "name": "Olivia",
+    "last_name": "Jackson",
+    "email": "olivia.jackson@example.com",
+    "address": {
+      "city": "Denver",
+      "home_address": "789 Pine St",
+      "road_number": 987,
+      "postal_code": 80201
+    },
+    "phone": "3692581470",
+    "working_company": "789 Inc."
+  }
+]

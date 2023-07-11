@@ -14,7 +14,7 @@
     <name>employer</name>
     <description>employer</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <checker-qual.version>3.36.0</checker-qual.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <spring-boot-actuator-autoconfigure.version>2.5.4</spring-boot-actuator-autoconfigure.version>
@@ -67,6 +67,18 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.11</version>
         </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.4</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -106,8 +118,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>16</source>
+                    <target>16</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
