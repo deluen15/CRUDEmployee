@@ -7,7 +7,6 @@ import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class EmployerService {
 
     private final EmployerRepository employerRepository;
 
-    private final @NonNull EmployerMapper mapper;
+    private final EmployerMapper mapper;
 
 
     public List<EmployerDTO> findAllEmployers() {

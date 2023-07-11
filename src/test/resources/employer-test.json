@@ -1,0 +1,14 @@
+{
+  "id": "2a4e894e-23f5-4c48-a67d-976eb3d598a1",
+  "name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "address": {
+    "city": "New York",
+    "home_address": "123 Main St",
+    "road_number": 456,
+    "postal_code": 10001
+  },
+  "phone": "1234567890",
+  "working_company": "ABC Corporation"
+}
