@@ -1,4 +1,4 @@
-package com.example.employer.JsonUtils;
+package com.example.employer.utils;
 
 import com.example.employer.markers.ConnectivityMarkers;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -1,6 +1,6 @@
 package com.example.employer.markers;
 
-import com.example.employer.JsonUtils.JsonUtils;
+import com.example.employer.utils.JsonUtils;
 import net.logstash.logback.marker.Markers;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

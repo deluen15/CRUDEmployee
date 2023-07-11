@@ -1,11 +1,11 @@
 package com.example.employer.service;
 
-import com.example.employer.JsonUtils.JsonUtils;
 import com.example.employer.dto.EmployerDTO;
 import com.example.employer.exeptions.EmployerNotFoundException;
 import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
+import com.example.employer.utils.JsonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
