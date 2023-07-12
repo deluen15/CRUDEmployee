@@ -2,6 +2,7 @@ package com.example.employer.service;
 
 import com.example.employer.dto.EmployerDTO;
 import com.example.employer.exeptions.EmployerNotFoundException;
+import com.example.employer.exeptions.HttpException;
 import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
@@ -14,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -23,6 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.catchThrowableOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -120,7 +123,9 @@ class EmployerServiceTest {
         String id = "42";
 
         // Act and Assert
-        assertThrows(EmployerNotFoundException.class, () -> employerService.getEmployerByID(id));
+        var thrownException = catchThrowableOfType(() -> employerService.getEmployerByID(id),
+                HttpException.class);
+        assertThat(thrownException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
         verify(employerRepository).findById(Mockito.any());
     }
 
@@ -131,10 +136,10 @@ class EmployerServiceTest {
         String id = "456";
         when(employerRepository.findById(id)).thenReturn(Optional.empty());
 
+        var thrownException = catchThrowableOfType(() -> employerService.getEmployerByID(id),
+                HttpException.class);
         // Act & Assert
-        assertThrows(EmployerNotFoundException.class, () -> {
-            employerService.getEmployerByID(id);
-        });
+        assertThat(thrownException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -226,7 +231,9 @@ class EmployerServiceTest {
         var updatedEmployer = JsonUtils.loadJson("entities/employerDTO-test.json", EmployerDTO.class).orElseThrow();
 
         // Act and Assert
-        assertThrows(EmployerNotFoundException.class, () -> employerService.updateEmployer(id, updatedEmployer));
+        var thrownException = catchThrowableOfType(() -> employerService.updateEmployer(id, updatedEmployer),
+                HttpException.class);
+        assertThat(thrownException.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
         verify(employerRepository).findById(Mockito.any());
     }
 
