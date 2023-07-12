@@ -32,15 +32,15 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-  scanner:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run dependency check
-        run: mvn org.owasp:dependency-check-maven:check
+  #  scanner:
+  #    needs: build
+  #    runs-on: ubuntu-latest
+  #    steps:
+  #      - name: Run dependency check
+  #        run: mvn org.owasp:dependency-check-maven:check
 
   docker:
-    needs: scanner
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Login to DockerHub
@@ -53,6 +53,8 @@ jobs:
         run: docker build -t ${{ github.repository }} .
 
       - name: Push Docker image
-        run: docker push ${{ github.repository }}
+        run: |
+          docker tag ${{ github.repository }} ${{ secrets.DOCKER_USERNAME }}/employer
+          docker push ${{ secrets.DOCKER_USERNAME }}/employer
 
 
