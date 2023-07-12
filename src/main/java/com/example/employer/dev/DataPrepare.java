@@ -2,13 +2,14 @@ package com.example.employer.dev;
 
 import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.employer.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -24,11 +25,10 @@ public class DataPrepare {
     }
 
     private void createEmployers() {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Employer[] employers = objectMapper.readValue(getClass().getResourceAsStream("/employers.json"), Employer[].class);
+            Employer[] employers = JsonUtils.loadJson("employers.json", Employer[].class).orElseThrow();
             Arrays.stream(employers)
-                    .filter(employer -> !repository.existsById(employer.getId()))
+                    .filter(employer -> !repository.existsById(Objects.requireNonNull(employer.getId())))
                     .forEach(repository::insert);
         } catch (Exception e) {
             log.error("Error while reading employers.json", e);

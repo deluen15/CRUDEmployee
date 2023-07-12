@@ -69,7 +69,8 @@ public class HttpException extends RuntimeException {
         }
 
         for (Map.Entry<String, Object> stringObjectEntry : this.relatedObjects.entrySet()) {
-            marker.add(Markers.append((stringObjectEntry).getKey(), getRelatedObjectAsString((stringObjectEntry).getValue())));
+            marker.add(Markers.append((stringObjectEntry).getKey(),
+                    getRelatedObjectAsString((stringObjectEntry).getValue())));
         }
 
         return marker;
@@ -88,8 +89,8 @@ public class HttpException extends RuntimeException {
     }
 
     protected static @Nullable String getRelatedObjectAsString(final @Nullable Object relatedObject) {
-        if (relatedObject instanceof String) {
-            return (String) relatedObject;
+        if (relatedObject instanceof String string) {
+            return string;
         } else {
             return JsonUtils.toPrettyJson(relatedObject).orElse(String.valueOf(null));
         }
@@ -124,7 +125,8 @@ public class HttpException extends RuntimeException {
         this.copy(cause);
     }
 
-    public HttpException(final @NonNull HttpStatus status, final @Nullable String message, final @Nullable Throwable cause) {
+    public HttpException(final @NonNull HttpStatus status, final @Nullable String message,
+                         final @Nullable Throwable cause) {
         super(message, cause);
         this.status = HttpStatus.INTERNAL_SERVER_ERROR;
         this.publicMessage = null;
@@ -169,7 +171,8 @@ public class HttpException extends RuntimeException {
 
     public @NonNull String getLogMessage() {
         String message = super.getMessage();
-        return StringUtils.defaultIfBlank(this.customLogMessage, StringUtils.defaultIfBlank(message, StringUtils.defaultIfBlank(this.publicMessage, this.getStatus().getReasonPhrase())));
+        return StringUtils.defaultIfBlank(this.customLogMessage, StringUtils.defaultIfBlank(message,
+                StringUtils.defaultIfBlank(this.publicMessage, this.getStatus().getReasonPhrase())));
     }
 
     public @NonNull Map<String, Object> getRelatedObjects() {
@@ -177,6 +180,7 @@ public class HttpException extends RuntimeException {
     }
 
     public @Nullable ErrorResponseBody toErrorResponseBody() {
-        return new ErrorResponseBody(this.status.value(), this.status.getReasonPhrase(), this.publicMessage, this.getIncidentId());
+        return new ErrorResponseBody(this.status.value(), this.status.getReasonPhrase(), this.publicMessage,
+                this.getIncidentId());
     }
 }

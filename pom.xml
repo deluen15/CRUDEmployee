@@ -21,6 +21,11 @@
         <swagger-annotations.version>2.2.14</swagger-annotations.version>
         <modelmapper.version>3.0.0</modelmapper.version>
         <springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
+        <micrometer-registry-prometheus.version>1.11.1</micrometer-registry-prometheus.version>
+        <spring-boot-starter-actuator.version>3.1.1</spring-boot-starter-actuator.version>
+        <commons-io.version>2.13.0</commons-io.version>
+        <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
+        <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
     </properties>
     <dependencies>
         <dependency>
@@ -65,27 +70,27 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.11</version>
+            <version>${springdoc-openapi-ui.version}</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>7.4</version>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.13.0</version>
+            <version>${commons-io.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>3.1.1</version>
+            <version>${spring-boot-starter-actuator.version}</version>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
-            <version>1.11.1</version>
+            <version>${micrometer-registry-prometheus.version}</version>
         </dependency>
 
     </dependencies>

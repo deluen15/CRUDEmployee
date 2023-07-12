@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Generated;
 
 import java.beans.ConstructorProperties;
+import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -57,67 +58,19 @@ public class ErrorResponseBody {
 
     @Generated
     public boolean equals(final Object o) {
-        if (o == this) {
+        if (this == o) {
             return true;
-        } else if (!(o instanceof ErrorResponseBody)) {
-            return false;
-        } else {
-            ErrorResponseBody other = (ErrorResponseBody) o;
-            if (!other.canEqual(this)) {
-                return false;
-            } else {
-                label71:
-                {
-                    Object this$status = this.getStatus();
-                    Object other$status = other.getStatus();
-                    if (this$status == null) {
-                        if (other$status == null) {
-                            break label71;
-                        }
-                    } else if (this$status.equals(other$status)) {
-                        break label71;
-                    }
-
-                    return false;
-                }
-
-                Object this$reason = this.getReason();
-                Object other$reason = other.getReason();
-                if (this$reason == null) {
-                    if (other$reason != null) {
-                        return false;
-                    }
-                } else if (!this$reason.equals(other$reason)) {
-                    return false;
-                }
-
-                label57:
-                {
-                    Object this$publicMessage = this.getPublicMessage();
-                    Object other$publicMessage = other.getPublicMessage();
-                    if (this$publicMessage == null) {
-                        if (other$publicMessage == null) {
-                            break label57;
-                        }
-                    } else if (this$publicMessage.equals(other$publicMessage)) {
-                        break label57;
-                    }
-
-                    return false;
-                }
-
-                Object this$incident = this.getIncident();
-                Object other$incident = other.getIncident();
-                if (this$incident == null) {
-                    if (other$incident != null) {
-                        return false;
-                    }
-                } else if (!this$incident.equals(other$incident)) {
-                    return false;
-                }
-                return false;
-            }
         }
+        if (!(o instanceof ErrorResponseBody other)) {
+            return false;
+        }
+        if (!other.canEqual(this)) {
+            return false;
+        }
+        return Objects.equals(getStatus(), other.getStatus()) &&
+                Objects.equals(getReason(), other.getReason()) &&
+                Objects.equals(getPublicMessage(), other.getPublicMessage()) &&
+                Objects.equals(getIncident(), other.getIncident());
     }
 
     @Generated
@@ -127,23 +80,13 @@ public class ErrorResponseBody {
 
     @Generated
     public int hashCode() {
-        boolean PRIME = true;
-        int result = 1;
-        Object $status = this.getStatus();
-        result = result * 59 + ($status == null ? 43 : $status.hashCode());
-        Object $reason = this.getReason();
-        result = result * 59 + ($reason == null ? 43 : $reason.hashCode());
-        Object $publicMessage = this.getPublicMessage();
-        result = result * 59 + ($publicMessage == null ? 43 : $publicMessage.hashCode());
-        Object $incident = this.getIncident();
-        result = result * 59 + ($incident == null ? 43 : $incident.hashCode());
-        return result;
+        return Objects.hash(getStatus(), getReason(), getPublicMessage(), getIncident());
     }
 
     @Generated
     public String toString() {
-        Integer var10000 = this.getStatus();
-        return "ErrorResponseBody(status=" + var10000 + ", reason=" + this.getReason() + ", publicMessage=" + this.getPublicMessage() + ", incident=" + this.getIncident() + ")";
+        return String.format("ErrorResponseBody(status=%d, reason=%s, publicMessage=%s, incident=%s)",
+                this.getStatus(), this.getReason(), this.getPublicMessage(), this.getIncident());
     }
 
     @ConstructorProperties({"status", "reason", "publicMessage", "incident"})

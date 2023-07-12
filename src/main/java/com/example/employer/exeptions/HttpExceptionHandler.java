@@ -1,6 +1,5 @@
 package com.example.employer.exeptions;
 
-import com.example.employer.utils.JsonUtils;
 import lombok.Generated;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
@@ -13,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Map;
 
 @ControllerAdvice
 public class HttpExceptionHandler {
@@ -29,27 +26,22 @@ public class HttpExceptionHandler {
     public @NonNull ResponseEntity<ErrorResponseBody> handleHttpException(final @NonNull HttpException e) {
         HttpStatus status = e.getStatus();
         Marker marker = e.getLogMarkers();
-        if (status.is5xxServerError()) {
-            log.error(marker, e.getLogMessage(), e);
-        } else if (status.is4xxClientError()) {
-            log.warn(marker, e.getLogMessage(), e);
-        } else if (status.is3xxRedirection()) {
-            log.info(marker, e.getLogMessage(), e);
-        } else {
-            log.debug(marker, e.getLogMessage(), e);
+        String logMessage = e.getLogMessage();
+        Throwable cause = e.getCause();
+
+        switch (status.series()) {
+            case SERVER_ERROR -> log.error(marker, logMessage, cause);
+            case CLIENT_ERROR -> log.warn(marker, logMessage, cause);
+            case REDIRECTION -> log.info(marker, logMessage, cause);
+            default -> log.debug(marker, logMessage, cause);
         }
 
-        return new ResponseEntity<>(e.toErrorResponseBody(), getResponseHeaders(), e.getStatus());
+        return new ResponseEntity<>(e.toErrorResponseBody(), getResponseHeaders(), status);
     }
 
     private static @NonNull HttpHeaders getResponseHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
-    }
-
-    private static @NonNull String toPrettyJson(final @NonNull Map<String, ?> message) {
-        String json = JsonUtils.toPrettyJson(message).orElse("");
-        return json.length() > 65536 ? String.format("%s [... string exceeded max length of %,d; %,d characters were truncated]", json.substring(0, 65536), 65536, json.length() - 65536) : json;
     }
 }

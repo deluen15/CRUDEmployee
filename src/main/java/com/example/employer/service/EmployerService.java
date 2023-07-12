@@ -1,7 +1,7 @@
 package com.example.employer.service;
 
 import com.example.employer.dto.EmployerDTO;
-import com.example.employer.exeptions.EmployerNotFoundException;
+import com.example.employer.exeptions.HttpExceptionBuilder;
 import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
@@ -35,9 +35,10 @@ public class EmployerService {
     public EmployerDTO getEmployerByID(String id) {
         return employerRepository.findById(id)
                 .map(mapper::map)
-                .orElseThrow(() -> {
+                .orElseThrow(() ->
+                {
                     log.warn("Employer with ID {} not found", id);
-                    return new EmployerNotFoundException(id);
+                    return HttpExceptionBuilder.notFound().exceptionMessage("Employer not found").build();
                 });
     }
 
@@ -62,7 +63,10 @@ public class EmployerService {
     public void updateEmployer(String id, EmployerDTO updatedEmployer) {
 
         Employer existingEmployer = employerRepository.findById(id)
-                .orElseThrow(() -> new EmployerNotFoundException(id));
+                .orElseThrow(() -> {
+                    log.warn("Employer with ID {} not found", id);
+                    return HttpExceptionBuilder.notFound().exceptionMessage("Employer not found").build();
+                });
         mapper.map(existingEmployer, updatedEmployer);
         existingEmployer.setId(updatedEmployer.getId());
         employerRepository.save(existingEmployer);

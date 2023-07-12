@@ -50,6 +50,12 @@ stack consists of the following components:
 By integrating with the ELK stack, the service can send its log statements to Logstash, which parses and forwards them to Elasticsearch for indexing. Kibana can
 then be used to explore and visualize the logs, enabling efficient log analysis and monitoring.
 
+## Monitoring
+
+This application utilizes Prometheus and Grafana for monitoring and visualization of its CRUD functionality. Prometheus is a powerful open-source monitoring and
+alerting toolkit, while Grafana is a feature-rich open-source platform for analytics and monitoring. By integrating Prometheus and Grafana into Docker
+Compose setup, you can effectively monitor and analyze various metrics from your CRUD application in real-time.
+
 ## OpenAPI Documentation Generation
 
 The Employer Service utilizes the OpenAPI Swagger generator by Maven plugin to automatically generate API documentation. This documentation describes the
