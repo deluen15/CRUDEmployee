@@ -26,6 +26,7 @@
         <commons-io.version>2.13.0</commons-io.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
+        <dependency-check-maven.version>8.2.1</dependency-check-maven.version>
     </properties>
     <dependencies>
         <dependency>
@@ -152,5 +153,49 @@
         </plugins>
         <finalName>employer-docker</finalName>
     </build>
-
+    <profiles>
+        <profile>
+            <id>service</id>
+            <build>
+                <finalName>service</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <excludeDevtools>true</excludeDevtools>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>repackage</goal>
+                                    <goal>build-info</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>scanner</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>${dependency-check-maven.version}</version>
+                        <configuration>
+                            <suppressionFile>security/dependency-check/suppression.xml</suppressionFile>
+                            <formats>HTML,JSON</formats>
+                            <ossIndexWarnOnlyOnRemoteErrors>true</ossIndexWarnOnlyOnRemoteErrors>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
