@@ -5,10 +5,8 @@ spring:
     mongodb:
       port: 27017
       database: employer
-      host: localhost
-      username: rootuser
-      password: rootpass
-      authentication-database: admin
+      host: ${MONGO_HOST}
+
   main:
     allow-circular-references: true
 
@@ -17,13 +15,29 @@ server:
   port: 8080
 
 management:
+  server:
+    port: 8081
   endpoints:
+    enabled-by-default: false
     web:
       exposure:
-        include: health,info,prometheus
-    jmx:
-      exposure:
-        include: '*'
-  metrics:
-    tags:
-      application: ${spring.application.name}
+        include: "health,info,metrics,prometheus"
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  data:
+    mongodb:
+      port: 27017
+      database: employer
+      host: localhost

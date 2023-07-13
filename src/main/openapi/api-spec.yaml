@@ -126,11 +126,12 @@ paths:
         required: true
       responses:
         default:
-          description: default response
+          description: error occurred - see status code and error object for more
+            information.
           content:
-            application/json:
+            application/x.error+json;version=1:
               schema:
-                $ref: '#/components/schemas/DefaultExceptionHandler'
+                $ref: '#/components/schemas/ErrorResponseBody'
         "200":
           description: OK
           content:
@@ -181,5 +182,3 @@ components:
           type: string
         working_company:
           type: string
-    DefaultExceptionHandler:
-      type: object
