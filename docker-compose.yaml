@@ -78,10 +78,31 @@ services:
     image: grafana/grafana
     ports:
       - "3000:3000"
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-loki-datasource
     depends_on:
       - prometheus
+    volumes:
+      - grafana-storage:/var/lib/
 
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki.yml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    image: grafana/promtail
+    volumes:
+      - ./loki/promtail.yml:/etc/promtail/promtail.yml
+      - ./logs/:/var/log:ro
+    command: -config.file=/etc/promtail/promtail.yml
+    depends_on:
+      - loki
+volumes:
+  grafana-storage: { }
 networks:
   default:
-    external:
-      name: spring
+    name: spring
