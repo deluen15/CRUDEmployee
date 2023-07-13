@@ -52,9 +52,10 @@ then be used to explore and visualize the logs, enabling efficient log analysis 
 
 ## Monitoring
 
-This application utilizes Prometheus and Grafana for monitoring and visualization of its CRUD functionality. Prometheus is a powerful open-source monitoring and
-alerting toolkit, while Grafana is a feature-rich open-source platform for analytics and monitoring. By integrating Prometheus and Grafana into Docker
-Compose setup, you can effectively monitor and analyze various metrics from your CRUD application in real-time.
+This application uses Prometheus and Grafana for monitoring and visualizing its CRUD functionality. Prometheus is a powerful open-source toolkit for monitoring
+and alerting, while Grafana is a feature-rich open-source platform for analytics and monitoring. In addition, this setup incorporates Loki and Promtail for
+managing logs. By integrating these monitoring and logging tools into the Docker Compose environment, you can effectively monitor and analyze various metrics
+from your CRUD application in real-time.
 
 ## OpenAPI Documentation Generation
 
