@@ -6,11 +6,9 @@ services:
     environment:
       - MONGO_HOST=mongodb
     ports:
-      - "${SRV_PORT:-8080}"
+      - "8080:8080"
     depends_on:
       - mongodb
-    networks:
-      - default
 
   mongodb:
     image: mongo:4.0-xenial
@@ -31,34 +29,41 @@ services:
       - mongodb
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongodb
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
     environment:
+      - bootstrap.memory_lock=true
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
     networks:
       - default
   logstash:
-    image: docker.elastic.co/logstash/logstash:8.8.2
+    image: docker.elastic.co/logstash/logstash:8.3.3
     volumes:
-      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ./logs/application.log:/var/log/application.log
+      #      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
     depends_on:
       - elasticsearch
     networks:
       - default
     ports:
-      - "5000:5000"
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.8.2
+    image: docker.elastic.co/kibana/kibana:8.3.3
     ports:
       - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
     networks:
       - default
     depends_on:
@@ -78,8 +83,6 @@ services:
     image: grafana/grafana
     ports:
       - "3000:3000"
-    environment:
-      - GF_INSTALL_PLUGINS=grafana-loki-datasource
     depends_on:
       - prometheus
     volumes:
@@ -97,12 +100,16 @@ services:
     image: grafana/promtail
     volumes:
       - ./loki/promtail.yml:/etc/promtail/promtail.yml
-      - ./logs/:/var/log:ro
+      - /var/log/:/var/log:ro
     command: -config.file=/etc/promtail/promtail.yml
     depends_on:
       - loki
 volumes:
   grafana-storage: { }
+  elasticsearch_data:
+    driver: local
+
 networks:
   default:
     name: spring
+    driver: bridge

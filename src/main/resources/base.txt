@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+  <!-- include default spring boot configuration -->
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+  <!-- overwrite default root log level with configurable one -->
+  <root level="${rootLevel:-WARN}">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+  <!-- use logstash appender if active -->
+  <if condition='property("useLogstash").equals("true")'>
+    <then>
+      <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${logstashHost:-localhost}:${logstashPort:-4560}</destination>
+        <keepAliveDuration>${keepAliveDuration:-5 minutes}</keepAliveDuration>
+        <includeCallerData>${includeCallerData:-true}</includeCallerData>
+
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+          <includeCallerData>${includeCallerData:-true}</includeCallerData>
+          <customFields>
+            {
+            "application": "${applicationName:- }",
+            "environment": "${environmentName:-undefined}",
+            "project": "connectivity"
+            }
+          </customFields>
+        </encoder>
+      </appender>
+
+      <root level="${rootLevel:-WARN}">
+        <appender-ref ref="LOGSTASH"/>
+      </root>
+    </then>
+  </if>
+
+  <!-- set log level of code in the configured package to the configured value -->
+  <logger name="${codePackage:-com.vaillantgroup}" level="${codeLevel:-DEBUG}"/>
+
+  <!-- fix unnecessary logging of the Kafka client -->
+  <logger name="org.apache.kafka.common.utils.AppInfoParser" level="WARN"/>
+  <logger name="org.apache.kafka.clients.consumer.ConsumerConfig" level="WARN"/>
+
+</included>

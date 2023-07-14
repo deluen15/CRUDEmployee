@@ -24,7 +24,7 @@
         <micrometer-registry-prometheus.version>1.11.1</micrometer-registry-prometheus.version>
         <spring-boot-starter-actuator.version>3.1.1</spring-boot-starter-actuator.version>
         <commons-io.version>2.13.0</commons-io.version>
-        <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
         <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
         <dependency-check-maven.version>8.2.1</dependency-check-maven.version>
     </properties>
@@ -93,6 +93,11 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
             <scope>runtime</scope>
             <version>${micrometer-registry-prometheus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.1.4</version>
         </dependency>
 
     </dependencies>

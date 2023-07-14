@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +25,10 @@ public class EmployerService {
 
     public List<EmployerDTO> findAllEmployers() {
         List<Employer> employers = employerRepository.findAll();
-        log.debug("Found {} employers", employers.size());
+        log.info("Found {} employers", employers.size());
         return employers.stream()
                 .map(mapper::map)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public EmployerDTO getEmployerByID(String id) {

@@ -12,7 +12,7 @@ spring:
 
 springdoc.swagger-ui.path: /swagger-ui.html
 server:
-  port: 8080
+  port: 8085
 
 management:
   server:
@@ -38,6 +38,6 @@ spring:
       on-profile: local
   data:
     mongodb:
-      port: 27017
-      database: employer
-      host: localhost
+      uri: mongodb://localhost:27017/employer
+server:
+  port: 8080
