@@ -1,24 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="applicationName" value="employer"/>
-
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>localhost:5000</destination>
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <includeCallerData>${includeCallerData:-true}</includeCallerData>
-            <customFields>
-                {
-                "application": "${applicationName:- }",
-                "environment": "${environmentName:-undefined}",
-                "project": "connectivity"
-                }
-            </customFields>
-        </encoder>
-    </appender>
-    <logger name="${codePackage:-com.example.employer}" level="${codeLevel:-DEBUG}"/>
 
-    <root level="info">
-        <appender-ref ref="logstash"/>
+    <if condition='property("useLogstash").equals("true")'>
+        <then>
+            <include resource="org/springframework/boot/logging/logback/base.xml"/>
+            <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+                <destination>${logstashHost:-localhost}:${logstashPort:-5000}</destination>
+                <keepAliveDuration>${keepAliveDuration:-5 minutes}</keepAliveDuration>
+                <includeCallerData>${includeCallerData:-true}</includeCallerData>
+                <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                    <includeCallerData>${includeCallerData:-true}</includeCallerData>
+                    <customFields>
+                        {
+                        "application": "${applicationName:- }",
+                        "environment": "${environmentName:-undefined}",
+                        "project": "connectivity"
+                        }
+                    </customFields>
+                </encoder>
+            </appender>
+
+            <root level="${rootLevel:-WARN}">
+                <appender-ref ref="LOGSTASH"/>
+            </root>
+        </then>
+    </if>
+
+    <if condition='property("useLoki").equals("true")'>
+        <then>
+            <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+                <http>
+                    <url>http://localhost:3100/loki/api/v1/push</url>
+                </http>
+                <format>
+                    <label>
+                        <pattern>app=my-app,host=${HOSTNAME},level=%level</pattern>
+                        <readMarkers>true</readMarkers>
+                    </label>
+                    <message>
+                        <pattern>%msg %ex</pattern>
+                    </message>
+                    <sortByTime>true</sortByTime>
+                </format>
+            </appender>
+
+            <root level="debug">
+                <appender-ref ref="LOKI"/>
+            </root>
+        </then>
+    </if>
+
+    <logger name="${codePackage:-com.example.employer}" level="${codeLevel:-DEBUG}"/>
+    <root level="${rootLevel:-WARN}">
+        <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>
