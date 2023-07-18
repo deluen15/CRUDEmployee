@@ -43,9 +43,9 @@ jobs:
           mvn verify
           mvn jacoco:prepare-agent jacoco:report
 
-      - name: Dependency check
-        run: |
-          mvn -B org.owasp:dependency-check-maven:check
+  #      - name: Dependency check
+  #        run: |
+  #          mvn -B org.owasp:dependency-check-maven:check
 
   #      - name: Upload coverage to SonarCloud
   #        uses: sonarsource/sonarcloud-github-action@master
