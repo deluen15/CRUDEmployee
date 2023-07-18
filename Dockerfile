@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17_35-jdk-alpine
 VOLUME /main-app
-ADD target/*.jar app.jar
+ADD service.jar service.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/service.jar"]
