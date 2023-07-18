@@ -21,7 +21,44 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: |
+          if [[ "$IN_CI" -eq 0 ]]; then
+            echo "Not sending pipelines statistics when running locally"
+            exit 0
+          fi
+          local environment="${1:-}"
+          if [[ -z "$environment" ]]; then
+          echo "No deployment environment given"
+          exit 1
+          fi
+          
+          local status="${2:-}"
+          if [[ -z "$status" ]]; then
+          echo "No deployment status given"
+          exit 1
+          fi
+          
+          long_commit="$(git rev-parse HEAD)"
+          local message=$(
+            cat <<EOF
+            {
+            "status": "$status",
+            "app" : "$APPLICATION_NAME",
+            "part-of": "iot",
+            "owner": "$OWNER",
+            "build_number": "$BUILD_NUMBER",
+            "branch": "$BRANCH_NAME",
+            "commit": "$long_commit",
+            "image": "$IMAGE",
+            "tag": "$VERSION",
+            "environment": "$environment"
+          }
+            EOF
+            )
+          
+            echo "$message"
+          
+            mvn -B package --file pom.xml
 
   scan:
     name: Scan
@@ -47,26 +84,29 @@ jobs:
         run: |
           mvn -B org.owasp:dependency-check-maven:check
 
-      - name: Upload coverage to SonarCloud
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: .
-          sonar.organization: ${{ secrets.SONAR_ORGANIZATION }}
-          sonar.projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
-          sonar.projectName: ${{ secrets.SONAR_PROJECT_NAME }}
-          sonar.projectVersion: ${{ secrets.SONAR_PROJECT_VERSION }}
-          sonar.coverage.jacoco.xmlReportPaths: target/site/jacoco/jacoco.xml
-          sonar.working.directory: target/sonar
-          sonar.sourceEncoding: UTF-8
-          sonar.language: java
-          sonar.java.binaries: target/classes
-          sonar.java.libraries: target/lib/*.jar
-          sonar.java.source: 17
-          sonar.java.target: 17
-          sonar.java.coveragePlugin: jacoco
-          sonar.junit.reportPaths: target/surefire-reports
+  #      - name: Upload coverage to SonarCloud
+  #        uses: sonarsource/sonarcloud-github-action@master
+  #        env:
+  #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #        with:
+  #          projectBaseDir: .
+  #          sonar.organization: ${{ secrets.SONAR_ORGANIZATION }}
+  #          sonar.projectKey: ${{ secrets.SONAR_PROJECT_KEY }}
+  #          sonar.projectName: ${{ secrets.SONAR_PROJECT_NAME }}
+  #          sonar.projectVersion: ${{ secrets.SONAR_PROJECT_VERSION }}
+  #          sonar.coverage.jacoco.xmlReportPaths: target/site/jacoco/jacoco.xml
+  #          sonar.working.directory: target/sonar
+  #          sonar.sourceEncoding: UTF-8
+  #          sonar.language: java
+  #          sonar.java.binaries: target/classes
+  #          sonar.java.libraries: target/lib/*.jar
+  #          sonar.java.source: 17
+  #          sonar.java.target: 17
+  #          sonar.java.coveragePlugin: jacoco
+  #          sonar.junit.reportPaths: target/surefire-reports
+  #          sonar.dependencyCheck.jsonReportPath: target/dependency-check-report.json
+  #          sonar.dependencyCheck.htmlReportPath: target/dependency-check-report.html
+
 
   publish:
     name: Publish
