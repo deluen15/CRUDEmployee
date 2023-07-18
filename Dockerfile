@@ -1,3 +1,8 @@
-FROM eclipse-temurin:17_35-jdk-alpine AS builder
-COPY --from=builder /workspace/service/target/service.jar service.jar
-ENTRYPOINT ["java","-jar","service.jar"]
+# Use the eclipse-temurin:17_35-jdk-alpine as the base image
+FROM eclipse-temurin:17_35-jdk-alpine
+
+WORKDIR /app
+
+COPY . /app
+
+CMD ["java", "-jar", "service.jar"]
