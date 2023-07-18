@@ -21,44 +21,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: |
-          if [[ "$IN_CI" -eq 0 ]]; then
-            echo "Not sending pipelines statistics when running locally"
-            exit 0
-          fi
-          local environment="${1:-}"
-          if [[ -z "$environment" ]]; then
-          echo "No deployment environment given"
-          exit 1
-          fi
-          
-          local status="${2:-}"
-          if [[ -z "$status" ]]; then
-          echo "No deployment status given"
-          exit 1
-          fi
-          
-          long_commit="$(git rev-parse HEAD)"
-          local message=$(
-            cat <<EOF
-            {
-            "status": "$status",
-            "app" : "$APPLICATION_NAME",
-            "part-of": "iot",
-            "owner": "$OWNER",
-            "build_number": "$BUILD_NUMBER",
-            "branch": "$BRANCH_NAME",
-            "commit": "$long_commit",
-            "image": "$IMAGE",
-            "tag": "$VERSION",
-            "environment": "$environment"
-          }
-            EOF
-            )
-          
-            echo "$message"
-          
-            mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml
 
   scan:
     name: Scan
