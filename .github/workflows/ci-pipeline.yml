@@ -35,6 +35,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
+          cache: maven
 
   #      - name: SonarCloud Scan
   #        uses: sonarsource/sonarcloud-github-action@master
@@ -57,6 +59,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
+          cache: maven
 
       - name: Publish to DockerHub
         run: |
