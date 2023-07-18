@@ -5,7 +5,7 @@ RUN chmod +x mvnw \
     && ./mvnw --version \
     && ./mvnw clean package
 
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:17_35-jdk-alpine
 COPY --from=build /usr/app/target/*.jar app.jar
 EXPOSE 8080
 
