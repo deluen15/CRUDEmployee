@@ -19,6 +19,21 @@ services:
     networks:
       - default
 
+  sonarqube:
+    image: sonarqube:latest
+    ports:
+      - "9000:9000"
+    environment:
+      - SONARQUBE_JDBC_USERNAME=sonarqube
+      - SONARQUBE_JDBC_PASSWORD=sonarqube
+      - SONARQUBE_MONGODB_URI=mongodb://mongo:27017/sonarqube
+    networks:
+      - default
+    volumes:
+      - sonarqube-data:/opt/sonarqube/data
+      - sonarqube-extensions:/opt/sonarqube/extensions
+      - sonarqube-logs:/opt/sonarqube/logs
+
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-expressEmplo
@@ -131,7 +146,9 @@ volumes:
   grafana-storage: { }
   elasticsearch_data:
     driver: local
-
+  sonarqube-data:
+  sonarqube-extensions:
+  sonarqube-logs:
 networks:
   default:
     name: spring
