@@ -64,9 +64,9 @@ jobs:
 
       - name: Publish to DockerHub
         run: |
-          echo ${{ env.DOCKERHUB_PASSWORD }} | docker login --username ${{ env.DOCKERHUB_USERNAME }} --password-stdin
-          docker build -t ${{ env.DOCKERHUB_USERNAME }}/employer .
-          docker push ${{ env.DOCKERHUB_USERNAME }}/employer
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/employer:${{ github.sha }} .
+          docker tag ${{ secrets.DOCKER_USERNAME }}/employer:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/employer:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/employer
 
 #  deploy:
 #    name: Deploy
