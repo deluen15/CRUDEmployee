@@ -1,6 +1,4 @@
 FROM eclipse-temurin:17_35-jdk-alpine
-COPY . /usr/app
-WORKDIR /usr/app
-ADD --from=build /usr/app/target/*.jar service.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/service.jar"]
+VOLUME /tmp
+ADD service.jar service.jar
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/service.jar"]
