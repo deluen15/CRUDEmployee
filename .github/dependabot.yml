@@ -13,4 +13,3 @@ updates:
       - "endrit-zeqo"
       - "joschaBurkholz"
       - "FabiScheytt"
-    commit-message: { "type": "template", "template": "Update from {{previous}} to {{next}}" }
