@@ -19,7 +19,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <spring-boot-actuator-autoconfigure.version>2.5.4</spring-boot-actuator-autoconfigure.version>
         <swagger-annotations.version>2.2.14</swagger-annotations.version>
-        <modelmapper.version>3.0.0</modelmapper.version>
+        <modelmapper.version>3.1.1</modelmapper.version>
         <springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
         <micrometer-registry-prometheus.version>1.11.1</micrometer-registry-prometheus.version>
         <spring-boot-starter-actuator.version>3.1.1</spring-boot-starter-actuator.version>
