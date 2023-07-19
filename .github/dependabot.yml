@@ -9,7 +9,6 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-      at: "00:00"
     reviewers:
       - "endrit-zeqo"
       - "joschaBurkholz"
