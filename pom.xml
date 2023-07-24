@@ -25,7 +25,7 @@
         <spring-boot-starter-actuator.version>3.1.1</spring-boot-starter-actuator.version>
         <commons-io.version>2.13.0</commons-io.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
-        <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
         <dependency-check-maven.version>8.3.1</dependency-check-maven.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
 
