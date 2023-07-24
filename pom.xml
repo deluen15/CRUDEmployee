@@ -30,7 +30,7 @@
         <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
 
         <loki-logback-appender.version>1.4.1</loki-logback-appender.version>
-        <janino.version>3.1.4</janino.version>
+        <janino.version>3.1.10</janino.version>
         <spring-kafka.version>3.0.8</spring-kafka.version>
     </properties>
     <dependencies>
