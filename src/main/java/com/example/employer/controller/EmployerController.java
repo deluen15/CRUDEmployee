@@ -2,7 +2,6 @@ package com.example.employer.controller;
 
 import com.example.employer.dto.EmployerDTO;
 import com.example.employer.service.EmployerService;
-import com.example.employer.streams.KafkaProducer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,7 +20,6 @@ import java.util.List;
 public class EmployerController {
 
     private final @NonNull EmployerService employerService;
-    private final @NonNull KafkaProducer producer;
 
     @GetMapping
     @Operation(summary = "Find all Employers",

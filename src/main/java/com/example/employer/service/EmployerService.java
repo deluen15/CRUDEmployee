@@ -5,8 +5,10 @@ import com.example.employer.exeptions.HttpExceptionBuilder;
 import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
+import com.example.employer.streams.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -23,6 +25,8 @@ public class EmployerService {
     private final EmployerRepository employerRepository;
 
     private final EmployerMapper mapper;
+
+    private final @NonNull KafkaProducer producer;
 
     public List<EmployerDTO> findAllEmployers() {
         List<Employer> employers = employerRepository.findAll();
@@ -49,6 +53,7 @@ public class EmployerService {
 
         Employer employer = mapper.map(employerDTO);
         employer.setId(id);
+        producer.sendEmployerMessage(employer);
         employerRepository.save(employer);
         log.info("Saved new employer with ID: {}", employer.getId());
     }
@@ -69,6 +74,7 @@ public class EmployerService {
                 });
         mapper.map(existingEmployer, updatedEmployer);
         existingEmployer.setId(updatedEmployer.getId());
+        producer.sendEmployerMessage(existingEmployer);
         employerRepository.save(existingEmployer);
         log.debug("Updated employer with ID: {}", id);
     }

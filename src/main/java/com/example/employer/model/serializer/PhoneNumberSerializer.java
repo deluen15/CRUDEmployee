@@ -12,8 +12,10 @@ public class PhoneNumberSerializer extends JsonSerializer {
 
     @Override
     public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-        if (value != null) {
-            gen.writeString(PREFIX + value);
+        String serializedValue = value == null ? "" : value.toString();
+        if (!serializedValue.startsWith(PREFIX)) {
+            serializedValue = PREFIX + serializedValue;
         }
+        gen.writeString(serializedValue);
     }
 }

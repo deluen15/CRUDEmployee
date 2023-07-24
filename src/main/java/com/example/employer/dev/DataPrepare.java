@@ -2,14 +2,13 @@ package com.example.employer.dev;
 
 import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
-import com.example.employer.service.imp.EmployerMapper;
 import com.example.employer.streams.KafkaProducer;
 import com.example.employer.utils.JsonUtils;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -20,7 +19,6 @@ public class DataPrepare {
 
     private final EmployerRepository repository;
     private final KafkaProducer producer;
-    private final EmployerMapper mapper;
 
     @PostConstruct
     public void postConstruct() {
@@ -35,7 +33,7 @@ public class DataPrepare {
                     .filter(employer -> !repository.existsById(Objects.requireNonNull(employer.getId())))
                     .forEach(employer -> {
                         repository.insert(employer);
-                        producer.sendProducts(mapper.map(employer));
+                        producer.sendEmployerMessage(employer);
                     });
         } catch (Exception e) {
             log.error("Error while reading employers.json", e);

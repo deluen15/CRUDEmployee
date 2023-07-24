@@ -1,7 +1,9 @@
 package com.example.employer.model;
 
+import com.example.employer.model.serializer.PhoneNumberSerializer;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +24,7 @@ public class Employer {
     private @Nullable String lastName;
     private @Nullable String email;
     private Address address;
+    @JsonSerialize(using = PhoneNumberSerializer.class)
     private @Nullable String phone;
     private @Nullable String workingCompany;
 
