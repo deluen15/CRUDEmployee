@@ -2,6 +2,7 @@ package com.example.employer.controller;
 
 import com.example.employer.dto.EmployerDTO;
 import com.example.employer.service.EmployerService;
+import com.example.employer.streams.KafkaProducer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,9 +17,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/employer/")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:8082", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class EmployerController {
 
     private final @NonNull EmployerService employerService;
+    private final @NonNull KafkaProducer producer;
 
     @GetMapping
     @Operation(summary = "Find all Employers",

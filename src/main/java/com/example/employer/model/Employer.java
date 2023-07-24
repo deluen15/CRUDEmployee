@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -21,7 +20,6 @@ public class Employer {
     private @Nullable String id;
     private @Nullable String name;
     private @Nullable String lastName;
-    @Indexed(unique = true)
     private @Nullable String email;
     private Address address;
     private @Nullable String phone;

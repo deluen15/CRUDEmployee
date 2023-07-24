@@ -6,17 +6,9 @@ spring:
       port: 27017
       database: employer
       host: ${MONGO_HOST}
-  cloud:
-    function:
-      definition: process
-    stream:
-      bindings:
-        process-in-0:
-          destination: mix.changed
-          content-type: application/json
-      kafka:
-        binder:
-          brokers: localhost:29092
+
+  kafka:
+    bootstrap-servers: localhost:29092
 
   main:
     allow-circular-references: true

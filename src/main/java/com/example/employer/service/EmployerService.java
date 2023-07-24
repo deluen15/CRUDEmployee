@@ -8,6 +8,7 @@ import com.example.employer.service.imp.EmployerMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,12 +17,12 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class EmployerService {
 
     private final EmployerRepository employerRepository;
 
     private final EmployerMapper mapper;
-
 
     public List<EmployerDTO> findAllEmployers() {
         List<Employer> employers = employerRepository.findAll();

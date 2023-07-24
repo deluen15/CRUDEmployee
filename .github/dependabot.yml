@@ -9,6 +9,10 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    assignees:
+      - "endrit-zeqo"
+    labels:
+      - "dependabot: update-to-latest"
     reviewers:
       - "endrit-zeqo"
       - "joschaBurkholz"

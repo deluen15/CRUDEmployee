@@ -2,6 +2,8 @@ package com.example.employer.dev;
 
 import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
+import com.example.employer.service.imp.EmployerMapper;
+import com.example.employer.streams.KafkaProducer;
 import com.example.employer.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,8 @@ import java.util.Objects;
 public class DataPrepare {
 
     private final EmployerRepository repository;
+    private final KafkaProducer producer;
+    private final EmployerMapper mapper;
 
     @PostConstruct
     public void postConstruct() {
@@ -29,11 +33,15 @@ public class DataPrepare {
             Employer[] employers = JsonUtils.loadJson("employers.json", Employer[].class).orElseThrow();
             Arrays.stream(employers)
                     .filter(employer -> !repository.existsById(Objects.requireNonNull(employer.getId())))
-                    .forEach(repository::insert);
+                    .forEach(employer -> {
+                        repository.insert(employer);
+                        producer.sendProducts(mapper.map(employer));
+                    });
         } catch (Exception e) {
             log.error("Error while reading employers.json", e);
         }
     }
+
 
     private void deleteAllEntries() {
         log.info("Deleting all data");
