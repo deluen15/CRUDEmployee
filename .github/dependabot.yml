@@ -12,7 +12,8 @@ updates:
     assignees:
       - "endrit-zeqo"
     labels:
-      - "dependabot: update-to-latest"
+      - "dependabot"
+      - "dependencies"
     reviewers:
       - "endrit-zeqo"
       - "joschaBurkholz"
