@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.10</version>
+        <version>3.1.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
@@ -18,19 +18,19 @@
         <checker-qual.version>3.36.0</checker-qual.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <spring-boot-actuator-autoconfigure.version>2.5.4</spring-boot-actuator-autoconfigure.version>
-        <swagger-annotations.version>2.2.14</swagger-annotations.version>
+        <swagger-annotations.version>2.2.15</swagger-annotations.version>
         <modelmapper.version>3.1.1</modelmapper.version>
         <springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
         <micrometer-registry-prometheus.version>1.11.1</micrometer-registry-prometheus.version>
         <spring-boot-starter-actuator.version>3.1.1</spring-boot-starter-actuator.version>
         <commons-io.version>2.13.0</commons-io.version>
-        <logstash-logback-encoder.version>7.2</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <springdoc-openapi-ui.version>1.6.11</springdoc-openapi-ui.version>
         <dependency-check-maven.version>8.3.1</dependency-check-maven.version>
-        <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
 
         <loki-logback-appender.version>1.4.1</loki-logback-appender.version>
-        <janino.version>3.1.4</janino.version>
+        <janino.version>3.1.10</janino.version>
         <spring-kafka.version>3.0.8</spring-kafka.version>
     </properties>
     <dependencies>
