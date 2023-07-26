@@ -17,6 +17,15 @@ springdoc.swagger-ui.path: /swagger-ui.html
 server:
   port: 8085
 
+mqtt:
+  broker:
+    url: tcp://mqtt-broker:1883
+  client:
+    id: client-1
+  topic: my/topic
+
+
+
 management:
   server:
     port: 8081

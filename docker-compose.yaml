@@ -45,6 +45,12 @@ services:
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongodb
 
+  mqtt-broker:
+    image: eclipse-mosquitto:2.0
+    ports:
+      - "1883:1883"
+    networks:
+      - default
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.3.3
     environment:
