@@ -1,234 +1,132 @@
 package com.example.employer.controller;
 
 import com.example.employer.dto.EmployerDTO;
-import com.example.employer.model.Address;
-import com.example.employer.model.Employer;
-import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.EmployerService;
-import com.example.employer.service.imp.EmployerMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.employer.utils.JsonUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.testng.Assert;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration(classes = {EmployerController.class, EmployerService.class})
-@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class EmployerControllerTest {
+
+    @Mock
+    private EmployerService employerService;
+
     @Autowired
-    private EmployerController employerController;
+    private MockMvc mockMvc;
 
-    @MockBean
-    private EmployerMapper employerMapper;
 
-    @MockBean
-    private EmployerRepository employerRepository;
-
-    /**
-     * Method under test: {@link EmployerController#deleteStudent(String)}
-     */
-    @Test
-    void testDeleteStudent() throws Exception {
-        // Arrange
-        doNothing().when(employerRepository).deleteById(Mockito.<String>any());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/api/v1/employer/{id}", "42");
-        MockMvc buildResult = MockMvcBuilders.standaloneSetup(employerController).build();
-
-        // Act
-        ResultActions actualPerformResult = buildResult.perform(requestBuilder);
-
-        // Assert
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    void testFindById() throws Exception {
-        // Arrange
-        Address address = new Address();
-        address.setCity("Oxford");
-        address.setHomeAddress("42 Main St");
-        address.setPostalCode(1);
-        address.setRoadNumber(10);
-
-        Employer employer = new Employer();
-        employer.setAddress(address);
-        employer.setEmail("jane.doe@example.org");
-        employer.setId("42");
-        employer.setLastName("Doe");
-        employer.setName("Name");
-        employer.setPhone("6625550144");
-        employer.setWorkingCompany("Working Company");
-        Optional<Employer> ofResult = Optional.of(employer);
-        when(employerRepository.findById(Mockito.<String>any())).thenReturn(ofResult);
-
-        Address address2 = new Address();
-        address2.setCity("Oxford");
-        address2.setHomeAddress("42 Main St");
-        address2.setPostalCode(1);
-        address2.setRoadNumber(10);
-
-        EmployerDTO employerDTO = new EmployerDTO();
-        employerDTO.setAddress(address2);
-        employerDTO.setEmail("jane.doe@example.org");
-        employerDTO.setId("42");
-        employerDTO.setLastName("Doe");
-        employerDTO.setName("Name");
-        employerDTO.setPhone("6625550144");
-        employerDTO.setWorkingCompany("Working Company");
-        when(employerMapper.map(Mockito.<Employer>any())).thenReturn(employerDTO);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/employer/{id}", "42");
-        MockMvc buildResult = MockMvcBuilders.standaloneSetup(employerController).build();
-
-        // Act
-        ResultActions actualPerformResult = buildResult.perform(requestBuilder);
-
-        // Assert
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .string(
-                                "{\"id\":\"42\",\"name\":\"Name\",\"last_name\":\"Doe\",\"email\":\"jane.doe@example.org\",\"address\":{\"city\":\"Oxford\""
-                                        + ",\"home_address\":\"42 Main St\",\"road_number\":10,\"postal_code\":1},\"phone\":\"+49 6625550144\",\"working_company"
-                                        + "\":\"Working Company\"}"));
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void testFindAllEmployers() throws Exception {
-        // Arrange
-        when(employerRepository.findAll()).thenReturn(new ArrayList<>());
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/employer/");
-        MockMvc buildResult = MockMvcBuilders.standaloneSetup(employerController).build();
+        List<EmployerDTO> employers = Arrays.asList(new EmployerDTO(), new EmployerDTO());
+        when(employerService.findAllEmployers()).thenReturn(employers);
 
-        // Act
-        ResultActions actualPerformResult = buildResult.perform(requestBuilder);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employer/")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2));
 
-        // Assert
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string("[]"));
+        Mockito.verify(employerService, Mockito.times(1)).findAllEmployers();
+        Mockito.verifyNoMoreInteractions(employerService);
+        Assert.assertEquals(employers.size(), 2);
     }
 
-    /**
-     * Method under test: {@link EmployerController#save(EmployerDTO)}
-     */
+
     @Test
-    void testSave() throws Exception {
-        // Arrange
-        when(employerRepository.findAll()).thenReturn(new ArrayList<>());
+    void testFindById() throws Exception {
+        EmployerDTO employer = new EmployerDTO();
+        employer.setId("1");
+        when(employerService.getEmployerByID(anyString())).thenReturn(employer);
 
-        Address address = new Address();
-        address.setCity("Oxford");
-        address.setHomeAddress("42 Main St");
-        address.setPostalCode(1);
-        address.setRoadNumber(10);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employer/{id}", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"));
 
-        EmployerDTO employerDTO = new EmployerDTO();
-        employerDTO.setAddress(address);
-        employerDTO.setEmail("jane.doe@example.org");
-        employerDTO.setId("42");
-        employerDTO.setLastName("Doe");
-        employerDTO.setName("Name");
-        employerDTO.setPhone("6625550144");
-        employerDTO.setWorkingCompany("Working Company");
-        String content = (new ObjectMapper()).writeValueAsString(employerDTO);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/employer/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
-        MockMvc buildResult = MockMvcBuilders.standaloneSetup(employerController).build();
 
-        // Act
-        ResultActions actualPerformResult = buildResult.perform(requestBuilder);
-
-        // Assert
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string("[]"));
+        Mockito.verify(employerService, Mockito.times(1)).getEmployerByID("1");
+        Mockito.verifyNoMoreInteractions(employerService);
+        Assert.assertEquals(employer.getId(), "1");
     }
 
-    /**
-     * Method under test: {@link EmployerController#update(String, EmployerDTO)}
-     */
+
     @Test
-    void testUpdate() throws Exception {
-        // Arrange
-        Address address = new Address();
-        address.setCity("Oxford");
-        address.setHomeAddress("42 Main St");
-        address.setPostalCode(1);
-        address.setRoadNumber(10);
+    void testDeleteEmployer() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/employer/{id}", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
-        Employer employer = new Employer();
-        employer.setAddress(address);
-        employer.setEmail("jane.doe@example.org");
-        employer.setId("42");
-        employer.setLastName("Doe");
-        employer.setName("Name");
-        employer.setPhone("6625550144");
-        employer.setWorkingCompany("Working Company");
-        Optional<Employer> ofResult = Optional.of(employer);
 
-        Address address2 = new Address();
-        address2.setCity("Oxford");
-        address2.setHomeAddress("42 Main St");
-        address2.setPostalCode(1);
-        address2.setRoadNumber(10);
+        Mockito.verify(employerService, Mockito.times(1)).deleteEmployerByID("1");
 
-        Employer employer2 = new Employer();
-        employer2.setAddress(address2);
-        employer2.setEmail("jane.doe@example.org");
-        employer2.setId("42");
-        employer2.setLastName("Doe");
-        employer2.setName("Name");
-        employer2.setPhone("6625550144");
-        employer2.setWorkingCompany("Working Company");
-        when(employerRepository.save(Mockito.<Employer>any())).thenReturn(employer2);
-        when(employerRepository.findById(Mockito.<String>any())).thenReturn(ofResult);
-        doNothing().when(employerMapper).map(Mockito.<Employer>any(), Mockito.<EmployerDTO>any());
+        Mockito.verify(employerService, Mockito.times(1)).getEmployerByID("1");
+        Mockito.verifyNoMoreInteractions(employerService);
+    }
 
-        Address address3 = new Address();
-        address3.setCity("Oxford");
-        address3.setHomeAddress("42 Main St");
-        address3.setPostalCode(1);
-        address3.setRoadNumber(10);
 
-        EmployerDTO employerDTO = new EmployerDTO();
-        employerDTO.setAddress(address3);
-        employerDTO.setEmail("jane.doe@example.org");
-        employerDTO.setId("42");
-        employerDTO.setLastName("Doe");
-        employerDTO.setName("Name");
-        employerDTO.setPhone("6625550144");
-        employerDTO.setWorkingCompany("Working Company");
-        String content = (new ObjectMapper()).writeValueAsString(employerDTO);
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put("/api/v1/employer/{id}", "42")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(content);
-        MockMvc buildResult = MockMvcBuilders.standaloneSetup(employerController).build();
+    @Test
+    void testSaveEmployer() throws Exception {
 
-        // Act
-        ResultActions actualPerformResult = buildResult.perform(requestBuilder);
+        EmployerDTO employerDTO = JsonUtils.loadJson("entities/employerDTO-test.json", EmployerDTO.class).orElseThrow();
 
-        // Assert
-        actualPerformResult.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string("Employer updated successfully"));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/employer/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(employerDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        Mockito.verify(employerService, Mockito.times(1)).saveEmployer(employerDTO);
+        Mockito.verify(employerService, Mockito.times(1)).saveEmployer(Mockito.argThat(savedEmployerDTO -> {
+            // Add assertions on the saved employerDTO object
+            Assert.assertEquals(employerDTO.getId(), savedEmployerDTO.getId());
+            Assert.assertEquals(employerDTO.getName(), savedEmployerDTO.getName());
+            Assert.assertEquals(employerDTO.getLastName(), savedEmployerDTO.getLastName());
+
+            return true;
+        }));
+
+    }
+
+    @Test
+    void testUpdateEmployer() throws Exception {
+        EmployerDTO employerDTO = JsonUtils.loadJson("src/test/resources/employer.json", EmployerDTO.class).orElseThrow();
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/employer/{id}", "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(employerDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        Mockito.verify(employerService, Mockito.times(1)).updateEmployer(Mockito.eq("1"), Mockito.argThat(updatedEmployerDTO -> {
+
+            Assert.assertEquals(employerDTO.getId(), updatedEmployerDTO.getId());
+            Assert.assertEquals(employerDTO.getName(), updatedEmployerDTO.getName());
+            Assert.assertEquals(employerDTO.getLastName(), updatedEmployerDTO.getLastName());
+
+            return true;
+        }));
     }
 
 }
-

@@ -17,6 +17,9 @@ springdoc.swagger-ui.path: /swagger-ui.html
 server:
   port: 8085
 
+useLogstash: false
+useLoki: false
+
 mqtt:
   broker:
     url: tcp://mqtt-broker:1883

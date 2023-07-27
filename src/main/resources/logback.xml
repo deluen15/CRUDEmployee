@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="applicationName" value="employer"/>
+
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- overwrite default root log level with configurable one -->
+    <root level="${rootLevel:-WARN}">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!--    <springProperty scope="context" name="useLogstash" source="useLogstash" defaultValue="false"/>-->
+    <!--    <springProperty scope="context" name="useLoki" source="useLoki" defaultValue="false"/>-->
 
     <if condition='property("useLogstash").equals("true")'>
         <then>
@@ -52,8 +61,11 @@
         </then>
     </if>
 
-    <logger name="${codePackage:-com.example.employer}" level="${codeLevel:-DEBUG}"/>
-    <root level="${rootLevel:-WARN}">
-        <appender-ref ref="CONSOLE"/>
-    </root>
+    <!-- set log level of code in the configured package to the configured value -->
+    <logger name="${codePackage:-com.example}" level="${codeLevel:-DEBUG}"/>
+
+    <!--    fix unnecessary logging of the Kafka client-->
+    <logger name="org.apache.kafka.common.utils.AppInfoParser" level="WARN"/>
+    <logger name="org.apache.kafka.clients.consumer.ConsumerConfig" level="WARN"/>
+
 </configuration>

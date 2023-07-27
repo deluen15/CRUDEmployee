@@ -7,8 +7,8 @@ import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
 import com.example.employer.streams.KafkaProducer;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -18,19 +18,20 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 @CrossOrigin(origins = "*")
 public class EmployerService {
+
+    public static final String EMPLOYER_NOT_FOUND = "Employer not found";
+    static final Logger log = LoggerFactory.getLogger(EmployerService.class);
 
     private final EmployerRepository employerRepository;
 
     private final EmployerMapper mapper;
 
-    private final @NonNull KafkaProducer producer;
+    private final KafkaProducer producer;
 
     public List<EmployerDTO> findAllEmployers() {
         List<Employer> employers = employerRepository.findAll();
-        log.info("Found {} employers", employers.size());
         return employers.stream()
                 .map(mapper::map)
                 .toList();
@@ -42,7 +43,7 @@ public class EmployerService {
                 .orElseThrow(() ->
                 {
                     log.warn("Employer with ID {} not found", id);
-                    return HttpExceptionBuilder.notFound().exceptionMessage("Employer not found").build();
+                    return HttpExceptionBuilder.notFound().exceptionMessage(EMPLOYER_NOT_FOUND).build();
                 });
     }
 
@@ -60,8 +61,10 @@ public class EmployerService {
 
 
     public void deleteEmployerByID(String id) {
+        Employer employer = employerRepository.findById(id)
+                .orElseThrow(() -> HttpExceptionBuilder.notFound().exceptionMessage(EMPLOYER_NOT_FOUND).build());
 
-        employerRepository.deleteById(id);
+        employerRepository.delete(employer);
         log.debug("Deleted employer with ID: {}", id);
     }
 
@@ -70,7 +73,7 @@ public class EmployerService {
         Employer existingEmployer = employerRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn("Employer with ID {} not found", id);
-                    return HttpExceptionBuilder.notFound().exceptionMessage("Employer not found").build();
+                    return HttpExceptionBuilder.notFound().exceptionMessage(EMPLOYER_NOT_FOUND).build();
                 });
         mapper.map(existingEmployer, updatedEmployer);
         existingEmployer.setId(updatedEmployer.getId());

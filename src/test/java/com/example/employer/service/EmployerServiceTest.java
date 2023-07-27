@@ -6,6 +6,7 @@ import com.example.employer.exeptions.HttpException;
 import com.example.employer.model.Employer;
 import com.example.employer.repository.EmployerRepository;
 import com.example.employer.service.imp.EmployerMapper;
+import com.example.employer.streams.KafkaProducer;
 import com.example.employer.utils.JsonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -41,10 +42,13 @@ class EmployerServiceTest {
     @Autowired
     private EmployerService employerService;
 
+    @MockBean
+    private KafkaProducer producer;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        employerService = new EmployerService(employerRepository, employerMapper);
+        employerService = new EmployerService(employerRepository, employerMapper, producer);
     }
 
     @Test
@@ -180,26 +184,29 @@ class EmployerServiceTest {
     @DisplayName("Delete Employer by ID - Successful")
     void should_testDeleteEmployerByID() {
         // Arrange
-        doNothing().when(employerRepository).deleteById(Mockito.any());
-        String id = "42";
+        String id = "123";
+        var expectedEmployer = JsonUtils.loadJson("entities/employer-test.json", Employer.class).orElseThrow();
+        when(employerRepository.findById(id)).thenReturn(Optional.of(expectedEmployer));
 
         // Act
         employerService.deleteEmployerByID(id);
 
         // Assert
-        verify(employerRepository).deleteById(Mockito.any());
+        verify(employerRepository, times(1)).findById(id);
+        verify(employerRepository, times(1)).delete(expectedEmployer);
     }
 
     @Test
     @DisplayName("Delete Employer by ID - Employer Not Found")
     void testDeleteEmployerByID_EmployerNotFound() {
         // Arrange
-        doThrow(new EmployerNotFoundException("42")).when(employerRepository).deleteById(Mockito.any());
         String id = "42";
+        when(employerRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act and Assert
-        assertThrows(EmployerNotFoundException.class, () -> employerService.deleteEmployerByID(id));
-        verify(employerRepository).deleteById(Mockito.any());
+        assertThrows(HttpException.class, () -> employerService.deleteEmployerByID(id));
+        verify(employerRepository, times(1)).findById(id);
+        verify(employerRepository, times(0)).delete(any(Employer.class));
     }
 
     @Test
