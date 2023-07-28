@@ -1,132 +1,109 @@
 package com.example.employer.controller;
 
-import com.example.employer.dto.EmployerDTO;
+import com.example.employer.model.dto.EmployerDTO;
 import com.example.employer.service.EmployerService;
-import com.example.employer.utils.JsonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.testng.Assert;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
 class EmployerControllerTest {
 
     @Mock
     private EmployerService employerService;
 
-    @Autowired
+    @InjectMocks
+    private EmployerController employerController;
+
     private MockMvc mockMvc;
 
+    // Helper method to create EmployerDTO objects
+    private EmployerDTO createEmployerDTO(String id, String name) {
+        return new EmployerDTO(id, name);
+    }
 
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(employerController).build();
     }
 
     @Test
     void testFindAllEmployers() throws Exception {
-        List<EmployerDTO> employers = Arrays.asList(new EmployerDTO(), new EmployerDTO());
+        List<EmployerDTO> employers = Arrays.asList(
+                createEmployerDTO("1", "Employer 1"),
+                createEmployerDTO("2", "Employer 2")
+        );
+
         when(employerService.findAllEmployers()).thenReturn(employers);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employer/")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2));
+        mockMvc.perform(get("/api/v1/employer/"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()").value(2));
 
-        Mockito.verify(employerService, Mockito.times(1)).findAllEmployers();
-        Mockito.verifyNoMoreInteractions(employerService);
-        Assert.assertEquals(employers.size(), 2);
+        verify(employerService).findAllEmployers();
     }
-
 
     @Test
     void testFindById() throws Exception {
-        EmployerDTO employer = new EmployerDTO();
-        employer.setId("1");
-        when(employerService.getEmployerByID(anyString())).thenReturn(employer);
+        EmployerDTO employer = createEmployerDTO("1", "Employer 1");
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/employer/{id}", "1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"));
+        when(employerService.getEmployerByID("1")).thenReturn(employer);
 
+        mockMvc.perform(get("/api/v1/employer/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.name").value("Employer 1"));
 
-        Mockito.verify(employerService, Mockito.times(1)).getEmployerByID("1");
-        Mockito.verifyNoMoreInteractions(employerService);
-        Assert.assertEquals(employer.getId(), "1");
+        verify(employerService).getEmployerByID("1");
     }
 
-
     @Test
-    void testDeleteEmployer() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/employer/{id}", "1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+    void testSave() throws Exception {
+        EmployerDTO employer = createEmployerDTO("1", "New Employer");
 
-
-        Mockito.verify(employerService, Mockito.times(1)).deleteEmployerByID("1");
-
-        Mockito.verify(employerService, Mockito.times(1)).getEmployerByID("1");
-        Mockito.verifyNoMoreInteractions(employerService);
-    }
-
-
-    @Test
-    void testSaveEmployer() throws Exception {
-
-        EmployerDTO employerDTO = JsonUtils.loadJson("entities/employerDTO-test.json", EmployerDTO.class).orElseThrow();
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/employer/")
+        mockMvc.perform(post("/api/v1/employer/")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(String.valueOf(employerDTO)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .content("{\"id\":\"1\",\"name\":\"New Employer\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Employer saved successfully"));
 
-        Mockito.verify(employerService, Mockito.times(1)).saveEmployer(employerDTO);
-        Mockito.verify(employerService, Mockito.times(1)).saveEmployer(Mockito.argThat(savedEmployerDTO -> {
-            // Add assertions on the saved employerDTO object
-            Assert.assertEquals(employerDTO.getId(), savedEmployerDTO.getId());
-            Assert.assertEquals(employerDTO.getName(), savedEmployerDTO.getName());
-            Assert.assertEquals(employerDTO.getLastName(), savedEmployerDTO.getLastName());
-
-            return true;
-        }));
-
+        verify(employerService).saveEmployer(employer);
     }
 
     @Test
-    void testUpdateEmployer() throws Exception {
-        EmployerDTO employerDTO = JsonUtils.loadJson("src/test/resources/employer.json", EmployerDTO.class).orElseThrow();
+    void testUpdate() throws Exception {
+        EmployerDTO employer = createEmployerDTO("1", "Updated Employer");
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/employer/{id}", "1")
+        mockMvc.perform(put("/api/v1/employer/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(String.valueOf(employerDTO)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                        .content("{\"id\":\"1\",\"name\":\"Updated Employer\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Employer updated successfully"));
 
-        Mockito.verify(employerService, Mockito.times(1)).updateEmployer(Mockito.eq("1"), Mockito.argThat(updatedEmployerDTO -> {
-
-            Assert.assertEquals(employerDTO.getId(), updatedEmployerDTO.getId());
-            Assert.assertEquals(employerDTO.getName(), updatedEmployerDTO.getName());
-            Assert.assertEquals(employerDTO.getLastName(), updatedEmployerDTO.getLastName());
-
-            return true;
-        }));
+        verify(employerService).updateEmployer("1", employer);
     }
 
+    @Test
+    void testDeleteStudent() throws Exception {
+        mockMvc.perform(delete("/api/v1/employer/1"))
+                .andExpect(status().isOk());
+
+        verify(employerService).deleteEmployerByID("1");
+    }
 }
