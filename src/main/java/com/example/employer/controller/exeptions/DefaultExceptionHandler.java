@@ -1,4 +1,4 @@
-package com.example.employer.exeptions;
+package com.example.employer.controller.exeptions;
 
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

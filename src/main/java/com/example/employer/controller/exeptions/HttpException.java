@@ -1,8 +1,8 @@
-package com.example.employer.exeptions;
+package com.example.employer.controller.exeptions;
 
-import com.example.employer.markers.ConnectivityMarkers;
-import com.example.employer.markers.Markers;
 import com.example.employer.utils.JsonUtils;
+import com.example.employer.utils.markers.ConnectivityMarkers;
+import com.example.employer.utils.markers.Markers;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

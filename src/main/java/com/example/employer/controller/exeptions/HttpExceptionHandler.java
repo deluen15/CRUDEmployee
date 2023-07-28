@@ -1,4 +1,4 @@
-package com.example.employer.exeptions;
+package com.example.employer.controller.exeptions;
 
 import lombok.Generated;
 import org.checkerframework.checker.nullness.qual.NonNull;

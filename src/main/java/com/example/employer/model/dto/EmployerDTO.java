@@ -1,4 +1,4 @@
-package com.example.employer.dto;
+package com.example.employer.model.dto;
 
 import com.example.employer.model.Address;
 import com.example.employer.model.serializer.PhoneNumberSerializer;

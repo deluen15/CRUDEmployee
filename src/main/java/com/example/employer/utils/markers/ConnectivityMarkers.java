@@ -1,4 +1,4 @@
-package com.example.employer.markers;
+package com.example.employer.utils.markers;
 
 import com.example.employer.utils.JsonUtils;
 import net.logstash.logback.marker.Markers;

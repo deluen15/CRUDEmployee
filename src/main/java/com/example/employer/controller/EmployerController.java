@@ -1,6 +1,6 @@
 package com.example.employer.controller;
 
-import com.example.employer.dto.EmployerDTO;
+import com.example.employer.model.dto.EmployerDTO;
 import com.example.employer.service.EmployerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

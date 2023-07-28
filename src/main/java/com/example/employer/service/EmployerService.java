@@ -1,10 +1,10 @@
 package com.example.employer.service;
 
-import com.example.employer.dto.EmployerDTO;
-import com.example.employer.exeptions.HttpExceptionBuilder;
+import com.example.employer.controller.exeptions.HttpExceptionBuilder;
 import com.example.employer.model.Employer;
-import com.example.employer.repository.EmployerRepository;
-import com.example.employer.service.imp.EmployerMapper;
+import com.example.employer.model.dto.EmployerDTO;
+import com.example.employer.service.mappers.EmployerMapper;
+import com.example.employer.service.repository.EmployerRepository;
 import com.example.employer.streams.KafkaProducer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

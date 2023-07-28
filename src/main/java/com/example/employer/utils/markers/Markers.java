@@ -1,4 +1,4 @@
-package com.example.employer.markers;
+package com.example.employer.utils.markers;
 
 import net.logstash.logback.marker.*;
 import org.slf4j.Marker;

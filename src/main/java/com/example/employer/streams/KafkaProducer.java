@@ -1,8 +1,8 @@
 package com.example.employer.streams;
 
-import com.example.employer.markers.ConnectivityMarkers;
 import com.example.employer.model.Employer;
 import com.example.employer.utils.JsonUtils;
+import com.example.employer.utils.markers.ConnectivityMarkers;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.marker.Markers;
 import org.springframework.beans.factory.annotation.Autowired;

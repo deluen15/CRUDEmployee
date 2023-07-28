@@ -1,4 +1,4 @@
-package com.example.employer.exeptions;
+package com.example.employer.controller.exeptions;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

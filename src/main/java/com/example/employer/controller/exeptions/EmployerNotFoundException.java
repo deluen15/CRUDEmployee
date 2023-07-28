@@ -1,4 +1,4 @@
-package com.example.employer.exeptions;
+package com.example.employer.controller.exeptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

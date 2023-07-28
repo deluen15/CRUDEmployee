@@ -1,7 +1,7 @@
-package com.example.employer.dev;
+package com.example.employer.configuration.dev;
 
 import com.example.employer.model.Employer;
-import com.example.employer.repository.EmployerRepository;
+import com.example.employer.service.repository.EmployerRepository;
 import com.example.employer.streams.KafkaProducer;
 import com.example.employer.utils.JsonUtils;
 import jakarta.annotation.PostConstruct;

@@ -2,15 +2,15 @@ package com.example.employer.streams;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
@@ -44,6 +44,28 @@ public class KafkaConfiguration {
     @Order(HIGHEST_PRECEDENCE)
     public KafkaTemplate<String, Object> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+
+//    @Bean
+//    @Order(HIGHEST_PRECEDENCE)
+//    ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
+//        var factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
+//        factory.setConsumerFactory(consumerFactory());
+//        return factory;
+//    }
+
+    ConsumerFactory<String, String> consumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+    }
+
+    Map<String, Object> consumerConfigs() {
+        var props = new HashMap<String, Object>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, System.getProperty(bootstrapAddress));
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "test-group");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        return props;
     }
 
 }

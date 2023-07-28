@@ -1,6 +1,6 @@
 package com.example.employer.utils;
 
-import com.example.employer.markers.ConnectivityMarkers;
+import com.example.employer.utils.markers.ConnectivityMarkers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

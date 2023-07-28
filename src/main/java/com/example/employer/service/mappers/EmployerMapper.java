@@ -1,7 +1,7 @@
-package com.example.employer.service.imp;
+package com.example.employer.service.mappers;
 
-import com.example.employer.dto.EmployerDTO;
 import com.example.employer.model.Employer;
+import com.example.employer.model.dto.EmployerDTO;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants.ComponentModel;
