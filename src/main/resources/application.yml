@@ -9,7 +9,23 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:29092
-
+  cloud:
+    function:
+      definition: mergeEmployersWithProducts
+    stream:
+      bindings:
+        mergeEmployersWithProducts-in-0:
+          destination: products
+          content-type: application/json
+        mergeEmployersWithProducts-out-0:
+          destination: products.out
+          content-type: application/json
+      kafka:
+        streams:
+          binder:
+            functions:
+              mergeEmployersWithProducts:
+                applicationId: mergeProducts
   main:
     allow-circular-references: true
 

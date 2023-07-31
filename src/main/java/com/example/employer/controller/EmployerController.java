@@ -1,7 +1,9 @@
 package com.example.employer.controller;
 
+import com.example.employer.model.ProductEmp;
 import com.example.employer.model.dto.EmployerDTO;
 import com.example.employer.service.EmployerService;
+import com.example.employer.service.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +22,12 @@ import java.util.List;
 public class EmployerController {
 
     private final @NonNull EmployerService employerService;
+    private final @NonNull ProductRepository productRepository;
+
+    @GetMapping("product")
+    public List<ProductEmp> findAllProduct() {
+        return productRepository.findAll();
+    }
 
     @GetMapping
     @Operation(summary = "Find all Employers",
