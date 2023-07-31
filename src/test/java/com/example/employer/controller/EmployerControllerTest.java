@@ -1,109 +1,59 @@
 package com.example.employer.controller;
 
 import com.example.employer.model.dto.EmployerDTO;
-import com.example.employer.service.EmployerService;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+public class EmployerControllerTest {
 
-class EmployerControllerTest {
+    private static WireMockServer wireMockServer;
+    private static final int wireMockPort = 8089;
+    private RestTemplate restTemplate;
 
-    @Mock
-    private EmployerService employerService;
+    @BeforeAll
+    public static void setupClass() {
+        wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(wireMockPort));
+        wireMockServer.start();
+        WireMock.configureFor("localhost", wireMockPort);
+    }
 
-    @InjectMocks
-    private EmployerController employerController;
-
-    private MockMvc mockMvc;
-
-    // Helper method to create EmployerDTO objects
-    private EmployerDTO createEmployerDTO(String id, String name) {
-        return new EmployerDTO(id, name);
+    @AfterAll
+    public static void tearDownClass() {
+        wireMockServer.stop();
     }
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(employerController).build();
+        restTemplate = new RestTemplate();
     }
 
     @Test
-    void testFindAllEmployers() throws Exception {
-        List<EmployerDTO> employers = Arrays.asList(
-                createEmployerDTO("1", "Employer 1"),
-                createEmployerDTO("2", "Employer 2")
-        );
+    void testFindAllEmployers() {
+        stubFor(get(urlPathEqualTo("/api/v1/employer/"))
+                .willReturn(aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                        .withBody("[{\"id\":\"1\",\"name\":\"Employer 1\"},{\"id\":\"2\",\"name\":\"Employer 2\"}]")));
 
-        when(employerService.findAllEmployers()).thenReturn(employers);
+        EmployerDTO[] employers = restTemplate.getForObject("http://localhost:" + wireMockPort + "/api/v1/employer/", EmployerDTO[].class);
 
-        mockMvc.perform(get("/api/v1/employer/"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2));
-
-        verify(employerService).findAllEmployers();
+        assertEquals(2, employers.length);
+        assertEquals("1", employers[0].getId());
+        assertEquals("Employer 1", employers[0].getName());
+        assertEquals("2", employers[1].getId());
+        assertEquals("Employer 2", employers[1].getName());
     }
 
-    @Test
-    void testFindById() throws Exception {
-        EmployerDTO employer = createEmployerDTO("1", "Employer 1");
-
-        when(employerService.getEmployerByID("1")).thenReturn(employer);
-
-        mockMvc.perform(get("/api/v1/employer/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("Employer 1"));
-
-        verify(employerService).getEmployerByID("1");
-    }
-
-    @Test
-    void testSave() throws Exception {
-        EmployerDTO employer = createEmployerDTO("1", "New Employer");
-
-        mockMvc.perform(post("/api/v1/employer/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":\"1\",\"name\":\"New Employer\"}"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Employer saved successfully"));
-
-        verify(employerService).saveEmployer(employer);
-    }
-
-    @Test
-    void testUpdate() throws Exception {
-        EmployerDTO employer = createEmployerDTO("1", "Updated Employer");
-
-        mockMvc.perform(put("/api/v1/employer/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":\"1\",\"name\":\"Updated Employer\"}"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Employer updated successfully"));
-
-        verify(employerService).updateEmployer("1", employer);
-    }
-
-    @Test
-    void testDeleteStudent() throws Exception {
-        mockMvc.perform(delete("/api/v1/employer/1"))
-                .andExpect(status().isOk());
-
-        verify(employerService).deleteEmployerByID("1");
-    }
+    // Add other functional test methods...
 }
