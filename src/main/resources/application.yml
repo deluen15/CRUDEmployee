@@ -26,6 +26,10 @@ spring:
             functions:
               mergeEmployersWithProducts:
                 applicationId: mergeProducts
+          bindings:
+            mergeEmployersWithProducts-in-1:
+              consumer:
+                materializedAs: products-store
   main:
     allow-circular-references: true
 

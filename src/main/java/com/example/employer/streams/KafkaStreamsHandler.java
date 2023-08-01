@@ -1,12 +1,10 @@
 package com.example.employer.streams;
 
 import com.bytes.springcloudproducts.model.Product;
-import com.example.employer.model.ProductEmp;
 import com.example.employer.service.mappers.ProductMapper;
 import com.example.employer.service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStream;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +22,9 @@ public class KafkaStreamsHandler {
     @Bean
     public Consumer<KStream<String, Product>> mergeEmployersWithProducts() {
         return kstream -> kstream
-                .map((key, value) -> new KeyValue<>(new ProductEmp(), value))
+                .groupByKey()
+                .reduce((product, product2) -> product2)
+                .toStream()
                 .mapValues((s, product) -> productMapper.map(product))
                 .peek((key, product) -> {
                     log.debug("Saving product: {}", product);
