@@ -20,7 +20,7 @@
         <springdoc-openapi-maven-plugin.version>1.4</springdoc-openapi-maven-plugin.version>
         <micrometer-registry-prometheus.version>1.11.2</micrometer-registry-prometheus.version>
         <spring-boot-starter-actuator.version>3.1.2</spring-boot-starter-actuator.version>
-        <commons-io.version>2.13.0</commons-io.version>
+        <commons-io.version>2.15.1</commons-io.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
         <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
         <dependency-check-maven.version>8.3.1</dependency-check-maven.version>
