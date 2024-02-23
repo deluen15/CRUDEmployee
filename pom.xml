@@ -27,7 +27,7 @@
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
 
         <loki-logback-appender.version>1.4.1</loki-logback-appender.version>
-        <janino.version>3.1.10</janino.version>
+        <janino.version>3.1.12</janino.version>
         <spring-kafka.version>3.0.9</spring-kafka.version>
         <org.eclipse.paho.client.mqttv3.version>1.2.5</org.eclipse.paho.client.mqttv3.version>
     </properties>
